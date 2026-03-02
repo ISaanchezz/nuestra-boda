@@ -278,6 +278,106 @@
             letter-spacing: 1px;
         }
 
+        /* Galería */
+        .gallery-grid {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+        .gallery-thumb {
+            padding: 0;
+            border: none;
+            background: transparent;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+            transform: translateZ(0);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .gallery-thumb:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 45px rgba(0,0,0,0.12);
+        }
+        .gallery-thumb img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+        .gallery-thumb:hover img {
+            transform: scale(1.04);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(6px);
+            z-index: 4000;
+        }
+        .lightbox.open {
+            display: flex;
+        }
+        .lightbox-content {
+            position: relative;
+            width: min(980px, 100%);
+        }
+        .lightbox-img {
+            width: 100%;
+            max-height: 86vh;
+            object-fit: contain;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.35);
+            display: block;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.92);
+            color: #222;
+            font-size: 20px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 46px;
+            height: 46px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.92);
+            color: #222;
+            font-size: 22px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+        }
+        .lightbox-prev { left: 12px; }
+        .lightbox-next { right: 12px; }
+
         /* Formulario */
         .form-container { background: white; padding: 50px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; border: 1px solid #eee; }
         input, select { width: 100%; padding: 12px; margin: 10px 0 20px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
@@ -439,6 +539,15 @@
                 top: 14px;
                 right: 14px;
             }
+
+            /* Galería en móvil */
+            .gallery-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+            .gallery-thumb img {
+                height: 160px;
+            }
         }
     </style>
 </head>
@@ -446,6 +555,15 @@
 
     <audio id="wedding-song" src="musica.mp3" preload="auto" loop></audio>
     <button id="music-toggle" aria-label="Silenciar música" title="Silenciar música">🔊</button>
+
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+        <div class="lightbox-content" role="dialog" aria-label="Imagen ampliada">
+            <button type="button" class="lightbox-close" aria-label="Cerrar">✕</button>
+            <button type="button" class="lightbox-nav lightbox-prev" aria-label="Anterior">‹</button>
+            <button type="button" class="lightbox-nav lightbox-next" aria-label="Siguiente">›</button>
+            <img class="lightbox-img" alt="Imagen ampliada">
+        </div>
+    </div>
 
     <div class="envelope-wrapper" id="wrapper">
         <div class="envelope" id="envelope" onclick="openEnvelope()">
@@ -526,6 +644,32 @@
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3042.4688290406557!2d-4.659024623479326!3d40.30975146214264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4043ee35250981%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1772464832762!5m2!1ses!2ses" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     <a href="https://maps.app.goo.gl/oi8AyMj2UqSt2MgW7" target="_blank" class="btn-premium">MAPS</a>
                 </div>
+            </div>
+        </div>
+
+        <div class="section" data-aos="fade-up">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.8rem; color: var(--color-eucalipto);">📸 Galería</h2>
+            <p>Una mini galería con algunas fotos bonitas.</p>
+
+            <div class="gallery-grid">
+                <button type="button" class="gallery-thumb" data-full="f1.jpeg" aria-label="Abrir foto 1">
+                    <img src="f1.jpeg" alt="Foto 1">
+                </button>
+                <button type="button" class="gallery-thumb" data-full="f2.jpeg" aria-label="Abrir foto 2">
+                    <img src="f2.jpeg" alt="Foto 2">
+                </button>
+                <button type="button" class="gallery-thumb" data-full="f3.jpeg" aria-label="Abrir foto 3">
+                    <img src="f3.jpeg" alt="Foto 3">
+                </button>
+                <button type="button" class="gallery-thumb" data-full="f4.jpeg" aria-label="Abrir foto 4">
+                    <img src="f4.jpeg" alt="Foto 4">
+                </button>
+                <button type="button" class="gallery-thumb" data-full="f5.jpeg" aria-label="Abrir foto 5">
+                    <img src="f5.jpeg" alt="Foto 5">
+                </button>
+                <button type="button" class="gallery-thumb" data-full="f6.jpeg" aria-label="Abrir foto 6">
+                    <img src="f6.jpeg" alt="Foto 6">
+                </button>
             </div>
         </div>
 
@@ -626,6 +770,57 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
+
+        // Galería (lightbox)
+        (function setupGallery() {
+            const thumbs = Array.from(document.querySelectorAll('.gallery-thumb'));
+            const lightbox = document.getElementById('lightbox');
+            if (!thumbs.length || !lightbox) return;
+
+            const imgEl = lightbox.querySelector('.lightbox-img');
+            const closeBtn = lightbox.querySelector('.lightbox-close');
+            const prevBtn = lightbox.querySelector('.lightbox-prev');
+            const nextBtn = lightbox.querySelector('.lightbox-next');
+
+            let currentIndex = 0;
+
+            function openAt(index) {
+                currentIndex = (index + thumbs.length) % thumbs.length;
+                const full = thumbs[currentIndex].getAttribute('data-full') || '';
+                imgEl.src = full;
+                lightbox.classList.add('open');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function close() {
+                lightbox.classList.remove('open');
+                lightbox.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                imgEl.src = '';
+            }
+
+            thumbs.forEach((btn, idx) => {
+                btn.addEventListener('click', () => openAt(idx));
+            });
+
+            closeBtn.addEventListener('click', close);
+            prevBtn.addEventListener('click', () => openAt(currentIndex - 1));
+            nextBtn.addEventListener('click', () => openAt(currentIndex + 1));
+
+            // Click fuera de la imagen cierra
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) close();
+            });
+
+            // Teclado: ESC cierra, flechas navegan
+            document.addEventListener('keydown', (e) => {
+                if (!lightbox.classList.contains('open')) return;
+                if (e.key === 'Escape') close();
+                if (e.key === 'ArrowLeft') openAt(currentIndex - 1);
+                if (e.key === 'ArrowRight') openAt(currentIndex + 1);
+            });
+        })();
 
         function downloadCalendar() {
             const icsContent = `BEGIN:VCALENDAR
