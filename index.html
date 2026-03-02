@@ -19,11 +19,11 @@
 
         body { margin: 0; font-family: 'Playfair Display', serif; background: #fdfaf5; overflow-x: hidden; color: var(--color-texto); text-align: center; scroll-behavior: smooth; }
 
-        /* --- SOBRE --- */
+        /* --- SOBRE (ARREGLO FINAL) --- */
         .envelope-wrapper {
             height: 100vh; display: flex; justify-content: center; align-items: center;
             background: #f4f1ea; perspective: 1500px; z-index: 1000;
-            transition: opacity 1s ease 1.5s;
+            transition: opacity 1s ease 2.2s; /* Espera a que la carta se luzca */
         }
         .envelope-wrapper.hidden { opacity: 0; pointer-events: none; visibility: hidden; position: fixed; }
 
@@ -31,7 +31,7 @@
             position: relative; width: 550px; height: 380px;
             background: #e7d8b8; background-image: var(--texture);
             box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-            cursor: pointer; border-radius: 4px; transition: transform 0.5s;
+            cursor: pointer; border-radius: 4px;
         }
 
         .flap {
@@ -52,23 +52,20 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: opacity 0.3s;
         }
 
-        /* --- CARTA ANIMADA --- */
+        /* --- CARTA QUE EMERGE Y SE CENTRA --- */
         .card-invitation {
             position: absolute; top: 15px; left: 35px; width: 480px; height: 350px;
             background: #fff; z-index: 30; padding: 40px; box-sizing: border-box;
             box-shadow: 0 0 15px rgba(0,0,0,0.05); background-image: var(--texture);
-            /* Animación en dos pasos: salir y centrar */
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.8s, 
-                        width 1s ease 1s, height 1s ease 1s, left 1s ease 1s;
+            transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.8s, box-shadow 0.5s;
         }
 
-        /* Estado Abierto: Primero sube (translateY -350px) y luego baja al centro */
         .envelope.open .flap { transform: rotateX(180deg); z-index: 20; }
         .envelope.open .seal { opacity: 0; pointer-events: none; }
         
-        /* La carta sube para salir y luego se posiciona visualmente en el centro */
+        /* Efecto de salida: Sube del sobre y se queda flotando en el centro visual */
         .envelope.open .card-invitation { 
-            transform: translateY(-100px) scale(1.1); 
+            transform: translateY(-200px) scale(1.1); 
             z-index: 100;
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
@@ -78,12 +75,15 @@
         h1 { font-family: 'Dancing Script'; font-size: 4.5rem; color: var(--color-dorado); margin: 0; }
         .section { margin: 80px auto; max-width: 1000px; }
 
+        /* Timer */
         .timer-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); min-width: 80px; }
         .timer-num { display: block; font-size: 2.5rem; font-weight: bold; color: var(--color-dorado); }
 
+        /* Botón */
         .btn-premium { display: inline-block; padding: 15px 35px; background: var(--color-dorado); color: white; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
+        .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 163, 115, 0.4); }
 
-        /* Formulario */
+        /* Checkboxes Arreglados */
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
         .checkbox-item { 
             display: flex; align-items: center; gap: 10px; font-size: 0.95rem; 
@@ -97,7 +97,9 @@
             .front::before { border-bottom-width: 240px; border-right-width: 170px; }
             .front::after { border-bottom-width: 240px; border-left-width: 170px; }
             .card-invitation { width: 300px; height: 210px; left: 20px; padding: 20px; }
+            .envelope.open .card-invitation { transform: translateY(-130px) scale(1.05); }
             .seal { top: 110px; width: 60px; height: 60px; }
+            h1 { font-size: 3rem; }
             .checkbox-item { flex: 1 1 100%; }
         }
     </style>
@@ -111,11 +113,11 @@
             <div class="flap"></div>
             <div class="front"></div>
             <div class="seal">I & N</div>
-            <div class="card-invitation" id="the-card">
-                <h2 style="font-family: 'Dancing Script'; color: var(--color-dorado); margin-top: 0;">¡Nos Casamos!</h2>
-                <div style="font-size: 1.8rem; margin: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">Iván & Nuria</div>
+            <div class="card-invitation">
+                <h2 style="font-family: 'Dancing Script'; color: var(--color-dorado); margin-top: 0; font-size: 2.2rem;">¡Nos Casamos!</h2>
+                <div style="font-size: 1.8rem; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">Iván & Nuria</div>
                 <p style="font-size: 1.1rem; color: #555;">Estás invitado a nuestro gran día</p>
-                <p style="color: #999; font-size: 0.8rem; margin-top: 20px;">Preparando tu invitación...</p>
+                <p style="color: #999; font-size: 0.8rem; margin-top: 20px;">Toca para descubrir los detalles</p>
             </div>
         </div>
     </div>
@@ -135,15 +137,21 @@
         <div class="section" data-aos="zoom-in" style="background: white; padding: 40px 20px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 700px;">
             <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">Confirmar Asistencia</h2>
             <form id="wedding-form">
-                <input type="text" name="Nombre" placeholder="Nombre completo" required style="width:100%; padding:14px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;">
-                <div class="checkbox-group">
-                    <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Ninguna"> Ninguna</label>
-                    <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Celíaco"> Celíaco</label>
-                    <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegano"> Vegano</label>
+                <div style="text-align: left; max-width: 500px; margin: auto;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px;">Nombre Completo</label>
+                    <input type="text" name="Nombre" required style="width:100%; padding:14px; margin-bottom:20px; border-radius:10px; border:1px solid #ddd; box-sizing: border-box;">
+                    
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px;">Preferencias Alimentarias</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Ninguna"> Ninguna</label>
+                        <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Celíaco"> Celíaco</label>
+                        <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegano"> Vegano</label>
+                        <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegetariano"> Vegetariano</label>
+                    </div>
                 </div>
-                <button type="submit" id="submit-btn" class="btn-premium" style="width:100%; margin-top:20px;">ENVIAR CONFIRMACIÓN</button>
+                <button type="submit" id="submit-btn" class="btn-premium" style="width:100%; max-width:500px; margin-top:30px;">ENVIAR CONFIRMACIÓN</button>
             </form>
-            <div id="success-msg" style="display:none; padding:20px;"><h3>¡Gracias! ✨</h3></div>
+            <div id="success-msg" style="display:none; padding:20px;"><h3>¡Gracias por confirmar! ✨ Nos vemos pronto.</h3></div>
         </div>
     </div>
 
@@ -153,25 +161,19 @@
 
         function openEnvelope() {
             const song = document.getElementById('wedding-song');
-            const envelope = document.getElementById('envelope');
-            const wrapper = document.getElementById('wrapper');
-            const mainContent = document.getElementById('main-content');
-            
             song.volume = 0.2;
             song.play().catch(() => {});
             
-            // 1. Abrir sobre
-            envelope.classList.add('open');
+            document.getElementById('envelope').classList.add('open');
 
-            // 2. Transición a la web
             setTimeout(() => {
-                wrapper.classList.add('hidden');
-                mainContent.style.display = 'block';
-                setTimeout(() => mainContent.style.opacity = '1', 100);
-            }, 3500); // Damos tiempo a ver la carta centrarse
+                document.getElementById('wrapper').classList.add('hidden');
+                document.getElementById('main-content').style.display = 'block';
+                setTimeout(() => document.getElementById('main-content').style.opacity = '1', 100);
+            }, 4000); // Tiempo para disfrutar la carta subiendo
         }
 
-        // Contador
+        // Cuenta atrás
         const weddingDate = new Date("Sep 20, 2026 18:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
@@ -183,7 +185,7 @@
             }
         }, 1000);
 
-        // Formulario
+        // Envío Formulario
         const form = document.getElementById('wedding-form');
         form.addEventListener('submit', e => {
             e.preventDefault();
@@ -191,11 +193,19 @@
             btn.disabled = true; btn.innerText = "Enviando...";
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwUGZoeNWv4jb2d-qHCZbF_6kQ2TxXqtwqewvMsKg3RBtth0FG9THm5zqDkz827w7q5EQ/exec';
             
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(new FormData(form)) })
+            fetch(scriptURL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                body: new URLSearchParams(new FormData(form)) 
+            })
             .then(() => {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4a373', '#8b1e1e', '#ffffff'] });
                 form.style.display = 'none';
                 document.getElementById('success-msg').style.display = 'block';
+            })
+            .catch(() => {
+                alert('Error al enviar.');
+                btn.disabled = false; btn.innerText = "ENVIAR CONFIRMACIÓN";
             });
         });
     </script>
