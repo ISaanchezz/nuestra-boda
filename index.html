@@ -6,6 +6,7 @@
     <title>Boda de Iván & Nuria</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
         :root {
@@ -13,120 +14,91 @@
             --color-lacre: #8b1e1e;
             --color-dorado: #d4a373;
             --color-texto: #4a4e3d;
-            /* Textura de papel sutil */
             --texture: url('https://www.transparenttextures.com/patterns/felt.png');
         }
 
         body { margin: 0; font-family: 'Playfair Display', serif; background: #fdfaf5; overflow-x: hidden; color: var(--color-texto); text-align: center; scroll-behavior: smooth; }
 
-        /* --- SOBRE ARREGLADO Y REALISTA --- */
+        /* --- SOBRE --- */
         .envelope-wrapper {
             height: 100vh; display: flex; justify-content: center; align-items: center;
             background: #f4f1ea; perspective: 1500px; z-index: 1000;
-            transition: opacity 1.2s ease 0.8s;
+            transition: opacity 1s ease 1.5s;
         }
         .envelope-wrapper.hidden { opacity: 0; pointer-events: none; visibility: hidden; position: fixed; }
 
         .envelope {
             position: relative; width: 550px; height: 380px;
-            background: var(--color-sobre); 
-            background-image: var(--texture);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-            cursor: pointer; border-radius: 4px;
+            background: #e7d8b8; background-image: var(--texture);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            cursor: pointer; border-radius: 4px; transition: transform 0.5s;
         }
 
-        /* Solapa Superior (Arreglada) */
         .flap {
-            position: absolute; top: 0; left: 0; width: 100%; height: 0;
-            border-top: 200px solid #d4c197; 
-            border-left: 275px solid transparent; 
-            border-right: 275px solid transparent;
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-top: 210px solid #d4c197; border-left: 275px solid transparent; border-right: 275px solid transparent;
             transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 50;
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05));
         }
 
-        /* Cuerpo del sobre (Frontal) */
-        .front { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 40; pointer-events: none;
-        }
-        /* Laterales */
-        .front::before { 
-            content: ""; position: absolute; bottom: 0; left: 0; 
-            border-bottom: 380px solid #e7d8b8; 
-            border-right: 275px solid transparent; 
-            background-image: var(--texture);
-        }
-        .front::after { 
-            content: ""; position: absolute; bottom: 0; right: 0; 
-            border-bottom: 380px solid #e7d8b8; 
-            border-left: 275px solid transparent; 
-            background-image: var(--texture);
-        }
+        .front { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; z-index: 40; }
+        .front::before { content: ""; position: absolute; bottom: 0; left: 0; border-bottom: 380px solid #e7d8b8; border-right: 275px solid transparent; background-image: var(--texture); }
+        .front::after { content: ""; position: absolute; bottom: 0; right: 0; border-bottom: 380px solid #e7d8b8; border-left: 275px solid transparent; background-image: var(--texture); }
 
         .seal {
-            position: absolute; top: 175px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: 180px; left: 50%; transform: translateX(-50%);
             width: 80px; height: 80px; background: var(--color-lacre); border-radius: 50%;
             z-index: 60; display: flex; justify-content: center; align-items: center;
-            color: #f3e5ab; font-weight: bold; font-size: 1.6rem; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
-            border: 2px solid #721616; transition: 0.5s;
+            color: #f3e5ab; font-weight: bold; font-size: 1.6rem; border: 2px solid #721616;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: opacity 0.3s;
         }
 
+        /* --- CARTA ANIMADA --- */
         .card-invitation {
-            position: absolute; top: 20px; left: 35px; width: 480px; height: 340px;
+            position: absolute; top: 15px; left: 35px; width: 480px; height: 350px;
             background: #fff; z-index: 30; padding: 40px; box-sizing: border-box;
-            transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            background-image: var(--texture);
+            box-shadow: 0 0 15px rgba(0,0,0,0.05); background-image: var(--texture);
+            /* Animación en dos pasos: salir y centrar */
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0.8s, 
+                        width 1s ease 1s, height 1s ease 1s, left 1s ease 1s;
         }
 
+        /* Estado Abierto: Primero sube (translateY -350px) y luego baja al centro */
         .envelope.open .flap { transform: rotateX(180deg); z-index: 20; }
-        .envelope.open .seal { opacity: 0; transform: translateX(-50%) scale(0.5); }
-        .envelope.open .card-invitation { transform: translateY(-320px); z-index: 100; }
+        .envelope.open .seal { opacity: 0; pointer-events: none; }
+        
+        /* La carta sube para salir y luego se posiciona visualmente en el centro */
+        .envelope.open .card-invitation { 
+            transform: translateY(-100px) scale(1.1); 
+            z-index: 100;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
 
         /* --- CONTENIDO WEB --- */
-        #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 40px 15px; }
+        #main-content { display: none; opacity: 0; transition: opacity 1.5s ease; padding: 40px 15px; }
         h1 { font-family: 'Dancing Script'; font-size: 4.5rem; color: var(--color-dorado); margin: 0; }
         .section { margin: 80px auto; max-width: 1000px; }
 
         .timer-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); min-width: 80px; }
         .timer-num { display: block; font-size: 2.5rem; font-weight: bold; color: var(--color-dorado); }
 
-        .btn-premium { display: inline-block; padding: 15px 35px; background: var(--color-dorado); color: white; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; border: none; font-family: inherit; cursor: pointer; }
-        .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 163, 115, 0.4); }
+        .btn-premium { display: inline-block; padding: 15px 35px; background: var(--color-dorado); color: white; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
 
-        .form-group { margin-bottom: 20px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; }
+        /* Formulario */
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
         .checkbox-item { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    font-size: 0.95rem; 
-    background: #f9f9f9; /* Un fondo ligero para distinguir la opción */
-    padding: 8px;
-    border-radius: 8px;
-    flex: 1 1 calc(50% - 15px); /* Dos por fila en pantallas medianas */
-    min-width: 140px;
-}
-        
-        @media (max-width: 480px) {
-    .checkbox-item {
-        flex: 1 1 100%; /* Una por fila en móviles estrechos */
-    }
-}
-        
+            display: flex; align-items: center; gap: 10px; font-size: 0.95rem; 
+            background: #fff; padding: 10px 15px; border-radius: 8px; border: 1px solid #eee;
+            flex: 1 1 calc(50% - 12px); min-width: 140px; cursor: pointer;
+        }
+
         @media (max-width: 600px) {
             .envelope { width: 340px; height: 240px; }
             .flap { border-top-width: 130px; border-left-width: 170px; border-right-width: 170px; }
             .front::before { border-bottom-width: 240px; border-right-width: 170px; }
             .front::after { border-bottom-width: 240px; border-left-width: 170px; }
-            .card-invitation { width: 300px; height: 210px; left: 20px; }
-            .seal { top: 105px; width: 60px; height: 60px; font-size: 1.2rem; }
-            h1 { font-size: 3rem; }
+            .card-invitation { width: 300px; height: 210px; left: 20px; padding: 20px; }
+            .seal { top: 110px; width: 60px; height: 60px; }
+            .checkbox-item { flex: 1 1 100%; }
         }
     </style>
 </head>
@@ -139,10 +111,11 @@
             <div class="flap"></div>
             <div class="front"></div>
             <div class="seal">I & N</div>
-            <div class="card-invitation">
+            <div class="card-invitation" id="the-card">
                 <h2 style="font-family: 'Dancing Script'; color: var(--color-dorado); margin-top: 0;">¡Nos Casamos!</h2>
-                <div style="font-size: 2rem; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">Iván & Nuria</div>
-                <p style="color: #999;">Toca para abrir la invitación</p>
+                <div style="font-size: 1.8rem; margin: 10px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">Iván & Nuria</div>
+                <p style="font-size: 1.1rem; color: #555;">Estás invitado a nuestro gran día</p>
+                <p style="color: #999; font-size: 0.8rem; margin-top: 20px;">Preparando tu invitación...</p>
             </div>
         </div>
     </div>
@@ -159,64 +132,18 @@
             </div>
         </div>
 
-        <div class="section" data-aos="fade-up">
-            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📍 Localizaciones</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top: 30px;">
-                <div style="background: white; padding: 25px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">Ceremonia ⛪</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.123!2d-3.703!3d40.416!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI0JzU3LjYiTiAzwrA0MicyMC44Ilc!5e0!3m2!1ses!2ses!4v1600000000000!5m2!1ses!2ses" width="100%" height="250" style="border:0; border-radius:10px;" allowfullscreen="" loading="lazy"></iframe>
-                    <a href="#" target="_blank" class="btn-premium" style="margin-top:15px;">Cómo llegar</a>
-                </div>
-                <div style="background: white; padding: 25px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">Banquete 🥂</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.123!2d-3.703!3d40.416!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI0JzU3LjYiTiAzwrA0MicyMC44Ilc!5e0!3m2!1ses!2ses!4v1600000000000!5m2!1ses!2ses" width="100%" height="250" style="border:0; border-radius:10px;" allowfullscreen="" loading="lazy"></iframe>
-                    <a href="#" target="_blank" class="btn-premium" style="margin-top:15px;">Cómo llegar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="section" data-aos="zoom-in" style="background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 700px;">
+        <div class="section" data-aos="zoom-in" style="background: white; padding: 40px 20px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 700px;">
             <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">Confirmar Asistencia</h2>
             <form id="wedding-form">
-                <div class="form-group">
-                    <label>Nombre y Apellidos</label>
-                    <input type="text" name="Nombre" required>
+                <input type="text" name="Nombre" placeholder="Nombre completo" required style="width:100%; padding:14px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;">
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Ninguna"> Ninguna</label>
+                    <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Celíaco"> Celíaco</label>
+                    <label class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegano"> Vegano</label>
                 </div>
-                <div class="form-group">
-                    <label>¿Vienes con acompañante?</label>
-                    <select id="has-partner" name="Acompañante_SiNo" onchange="togglePartner()">
-                        <option value="No">No</option>
-                        <option value="Sí">Sí</option>
-                    </select>
-                </div>
-                <div id="partner-details" style="display:none; background: #fdfaf5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <div class="form-group"><label>¿Cuántos?</label><input type="number" name="Num_Acompañantes" value="1"></div>
-                    <div class="form-group"><label>Nombres</label><input type="text" name="Nombres_Acompañantes"></div>
-                </div>
-                <div class="form-group">
-                    <label>Preferencias Alimentarias</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Ninguna"> Ninguna</div>
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Celíaco"> Celíaco</div>
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegano"> Vegano</div>
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegetariano"> Vegetariano</div>
-                    </div>
-                </div>
-                <div class="form-group"><label>Otras Alergias</label><input type="text" name="Alergias"></div>
-                <div class="form-group"><label>¿Autobús?</label><select name="Autobus"><option value="No">No</option><option value="Sí">Sí</option></select></div>
-                <div class="form-group"><label>Canción favorita</label><input type="text" name="Cancion"></div>
-                <button type="submit" id="submit-btn" class="btn-premium" style="width:100%">ENVIAR CONFIRMACIÓN</button>
+                <button type="submit" id="submit-btn" class="btn-premium" style="width:100%; margin-top:20px;">ENVIAR CONFIRMACIÓN</button>
             </form>
-            <div id="success-msg" style="display:none; padding:20px;"><h3>¡Gracias! Nos vemos pronto. ✨</h3></div>
-        </div>
-
-        <div class="section" data-aos="fade-up" style="margin-top: 100px; border-top: 1px solid #eee; padding-top: 50px;">
-            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado);">🎁 Regalo</h2>
-            <p>Si deseas ayudarnos con nuestro viaje:</p>
-            <div style="background: #f4f1ea; padding: 20px; border-radius: 15px; font-family: monospace; font-size: 1.2rem; display: inline-block; margin-top: 10px;">
-                ES00 0000 0000 0000 0000 0000
-            </div>
-            <p style="font-size: 0.8rem; color: #999;">Titulares: Iván y Nuria</p>
+            <div id="success-msg" style="display:none; padding:20px;"><h3>¡Gracias! ✨</h3></div>
         </div>
     </div>
 
@@ -224,21 +151,24 @@
     <script>
         AOS.init({ duration: 1000, once: true });
 
-        function togglePartner() {
-            const val = document.getElementById('has-partner').value;
-            document.getElementById('partner-details').style.display = (val === 'Sí') ? 'block' : 'none';
-        }
-
         function openEnvelope() {
             const song = document.getElementById('wedding-song');
+            const envelope = document.getElementById('envelope');
+            const wrapper = document.getElementById('wrapper');
+            const mainContent = document.getElementById('main-content');
+            
             song.volume = 0.2;
             song.play().catch(() => {});
-            document.getElementById('envelope').classList.add('open');
+            
+            // 1. Abrir sobre
+            envelope.classList.add('open');
+
+            // 2. Transición a la web
             setTimeout(() => {
-                document.getElementById('wrapper').classList.add('hidden');
-                document.getElementById('main-content').style.display = 'block';
-                setTimeout(() => document.getElementById('main-content').style.opacity = '1', 100);
-            }, 2500); // Tiempo reducido para mejor experiencia
+                wrapper.classList.add('hidden');
+                mainContent.style.display = 'block';
+                setTimeout(() => mainContent.style.opacity = '1', 100);
+            }, 3500); // Damos tiempo a ver la carta centrarse
         }
 
         // Contador
@@ -253,46 +183,21 @@
             }
         }, 1000);
 
-        // Envío Formulario Mejorado
+        // Formulario
         const form = document.getElementById('wedding-form');
         form.addEventListener('submit', e => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            btn.disabled = true; 
-            btn.innerText = "Enviando...";
-
+            btn.disabled = true; btn.innerText = "Enviando...";
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwUGZoeNWv4jb2d-qHCZbF_6kQ2TxXqtwqewvMsKg3RBtth0FG9THm5zqDkz827w7q5EQ/exec';
             
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                if (key === 'Preferencia') {
-                    const current = formData.getAll('Preferencia');
-                    data[key] = current.join(', ');
-                } else {
-                    data[key] = value;
-                }
-            });
-
-            const params = new URLSearchParams(data);
-
-            fetch(scriptURL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                body: params 
-            })
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(new FormData(form)) })
             .then(() => {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
                 form.style.display = 'none';
                 document.getElementById('success-msg').style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error!', error.message);
-                alert('Hubo un error al enviar. ¡Inténtalo de nuevo!');
-                btn.disabled = false; 
-                btn.innerText = "ENVIAR";
             });
         });
     </script>
 </body>
 </html>
-
