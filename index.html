@@ -3,181 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestra Boda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display&display=swap" rel="stylesheet">
-    
+    <title>Boda de Iván & Nuria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-sobre: #d4a373;
+            --color-sobre-exterior: #eaddca;
+            --color-sobre-interior: #d4a373;
             --color-papel: #fefae0;
             --color-texto: #606c38;
+            --color-lacre: #a52a2a;
         }
 
         body { margin: 0; font-family: 'Playfair Display', serif; background: #f4f1ea; color: var(--color-texto); overflow-x: hidden; text-align: center; }
         
-        /* --- SECCIÓN SOBRE --- */
-        .envelope-wrapper {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            perspective: 1000px;
-            background: #f4f1ea;
-        }
-
-        .envelope {
-            position: relative;
-            width: 320px;
-            height: 220px;
-            background: var(--color-sobre);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
-
-        .envelope:before {
-            content: "";
-            position: absolute;
-            top: 0; z-index: 3;
-            border-top: 120px solid #bc8a5f;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            transition: transform 0.8s;
-            transform-origin: top;
-        }
-
-        .envelope.open:before { transform: rotateX(180deg); z-index: 0; }
-
-        .invitation-card {
-            position: absolute;
-            top: 10px; left: 10px;
-            width: 300px; height: 200px;
-            background: white;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: transform 0.8s;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.5rem;
-        }
-
-        .envelope.open .invitation-card { transform: translateY(-120px); }
-
-        /* --- CONTENIDO DE LA WEB --- */
-        #main-content {
-            display: none;
-            padding: 40px 20px;
-            animation: fadeIn 2s ease;
-        }
-
-        h1 { font-size: 3rem; font-family: 'Dancing Script', cursive; }
-        .section { margin: 60px 0; max-width: 800px; margin-left: auto; margin-right: auto; }
-
-        /* Contador */
-        #countdown {
-            display: flex; justify-content: center; gap: 20px;
-            font-size: 1.2rem; font-weight: bold; margin-top: 20px;
-        }
-
-        /* Responsive Map & Tally */
-        iframe { width: 100%; border-radius: 15px; border: none; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
-</head>
-<body>
-
-    <audio id="wedding-song" src="musica.mp3" preload="auto" loop></audio>
-
-    <div class="envelope-wrapper" id="wrapper" onclick="openEnvelope()">
-        <div class="envelope" id="envelope">
-            <div class="invitation-card">
-                <p>Nuestra Boda</p>
-                <small>Toca para abrir</small>
-            </div>
-        </div>
-    </div>
-
-    <div id="main-content">
-        <h1>🤵 ¡Nos Casamos! 👰</h1>
-        
-        <div class="section">
-            <h2>Faltan:</h2>
-            <div id="countdown">Cargando cuenta atrás...</div>
-        </div>
-
-        <div class="section" id="donde-estamos">
-    <h2 style="font-family: 'Dancing Script', cursive; font-size: 3rem; margin-bottom: 40px;">📍 ¿Dónde nos vemos?</h2>
-    
-    <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; padding: 0 10px;">
-        
-        <div style="flex: 1; min-width: 320px; max-width: 450px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #eee;">
-            <h3 style="margin-top: 0; color: #d4a373;">⛪ La Ceremonia</h3>
-            <p><strong>Ermita Nuestra Señora de los Remedios</strong></p>
-            <p style="font-size: 0.9rem; color: #888;">Ctra. de la Adrada, 12B, Sotillo de la Adrada</p>
-            
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.1826689807376!2d-4.5910399234798644!3d40.293902863105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd40467159f1a18f%3A0x6208116ea7ee3e51!2sErmita%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1772460863596!5m2!1ses!2ses" width="100%" height="250" style="border:0; border-radius: 10px;" allowfullscreen="" loading="lazy"></iframe>
-            
-            <a href="https://www.google.com/maps/dir/?api=1&destination=Ermita+Nuestra+Señora+de+los+Remedios+Sotillo+de+la+Adrada" target="_blank" 
-               style="display: inline-block; margin-top: 20px; padding: 12px 25px; background-color: #d4a373; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);">
-               🚗 Cómo llegar con GPS
-            </a>
-        </div>
-
-        <div style="flex: 1; min-width: 320px; max-width: 450px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #eee;">
-            <h3 style="margin-top: 0; color: #d4a373;">🍴 El Banquete</h3>
-            <p><strong>Complejo Turístico La Cabaña</strong></p>
-            <p style="font-size: 0.9rem; color: #888;">Carretera CL-501, km. 21.500, La Adrada</p>
-            
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3042.4688290406557!2d-4.659024623479326!3d40.30975146214264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4043ee35250981%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1772460808541!5m2!1ses!2ses" width="100%" height="250" style="border:0; border-radius: 10px;" allowfullscreen="" loading="lazy"></iframe>
-            
-            <a href="https://www.google.com/maps/dir/?api=1&destination=Complejo+Turístico+La+Cabaña+La+Adrada" target="_blank" 
-               style="display: inline-block; margin-top: 20px; padding: 12px 25px; background-color: #d4a373; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);">
-               🚗 Cómo llegar con GPS
-            </a>
-        </div>
-
-    </div>
-</div>
-
-        <div class="section">
-            <h2>📝 Confirma tu asistencia</h2>
-            <iframe src="https://tally.so/r/ZjNNL0" height="600"></iframe>
-        </div>
-    </div>
-
-    <script>
-        function openEnvelope() {
-            // Animación
-            document.getElementById('envelope').classList.add('open');
-            
-            // Música (intenta reproducir)
-            const song = document.getElementById('wedding-song');
-            song.play().catch(e => console.log("El navegador bloqueó el inicio automático"));
-
-            // Mostrar contenido tras la animación
-            setTimeout(() => {
-                document.getElementById('main-content').style.display = 'block';
-                document.getElementById('wrapper').style.height = 'auto';
-                window.scrollTo({ top: 400, behavior: 'smooth' });
-            }, 1000);
-        }
-
-        // --- CÓDIGO DEL CONTADOR ---
-        const weddingDate = new Date("26 Junio, 2027 13:00:00").getTime(); // CAMBIA TU FECHA AQUÍ
-
-        setInterval(function() {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            
-            document.getElementById("countdown").innerHTML = `
-                <div>${days}d</div> : <div>${hours}h</div> : <div>${mins}m</div>
-            `;
-        }, 1000);
-    </script>
-</body>
-</html>
-
+        /* --- SOBRE --- */
+        .envelope-wrapper { height: 100vh; display: flex; justify-content: center; align-items: center; cursor: pointer; perspective: 1500px; background: radial-gradient(circle, #fdfbf6 0%, #eaddca 100%); z-index: 100; transition: opacity 1s ease, visibility 1s ease; }
+        .envelope-wrapper.hidden { opacity: 0; visibility: hidden; pointer-events: none; position: fixed; }
+        .envelope { position: relative; width: 380px; height: 260px; background: var(--color-sobre-exterior); box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-radius: 5px; }
+        .envelope-flap { position: absolute; top: 0; left: 0; width: 0
