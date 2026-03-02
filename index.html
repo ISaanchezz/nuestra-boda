@@ -20,7 +20,7 @@
             margin: 0; 
             font-family: 'Playfair Display', serif; 
             background-color: var(--color-crema);
-            background-image: url('fondo-eucalipto-boda.png');
+            background-image: url('D15.jpg');
             background-repeat: repeat;
             background-size: 380px 380px;
             overflow-x: hidden; 
@@ -274,11 +274,43 @@
         }
 
         @media (max-width: 550px) {
-            .envelope { width: 340px; height: 240px; }
-            .flap { border-top-width: 140px; border-left-width: 170px; border-right-width: 170px; }
-            .card-invitation { width: 300px; height: 210px; left: 20px; }
-            .seal { top: 110px; width: 55px; height: 55px; }
-            h1 { font-size: 3.5rem; }
+            .envelope-wrapper {
+                padding: 0 10px;
+            }
+            .envelope {
+                width: 100%;
+                max-width: 340px;
+                height: 230px;
+            }
+            .envelope-front::before,
+            .envelope-front::after {
+                border-bottom-width: 150px;
+            }
+            .envelope-front::before {
+                border-right-width: 170px;
+            }
+            .envelope-front::after {
+                border-left-width: 170px;
+            }
+            .envelope-flap {
+                border-top-width: 150px;
+                border-left-width: 170px;
+                border-right-width: 170px;
+            }
+            .envelope-seal {
+                top: 115px;
+                width: 52px;
+                height: 52px;
+                font-size: 0.85rem;
+            }
+            .card-invitation {
+                width: calc(100% - 40px);
+                padding: 24px 22px;
+            }
+            .envelope.open .card-invitation {
+                transform: translate(-50%, -105%);
+            }
+            h1 { font-size: 3.2rem; }
             .timeline-item { flex: 1 1 50%; }
         }
     </style>
