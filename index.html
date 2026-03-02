@@ -19,14 +19,26 @@
         body { 
             margin: 0; 
             font-family: 'Playfair Display', serif; 
-            background:
-                radial-gradient(circle at top left, rgba(134,163,151,0.25), transparent 55%),
-                radial-gradient(circle at bottom right, rgba(181,157,126,0.18), transparent 55%),
-                var(--color-crema);
+            background: var(--color-crema);
             overflow-x: hidden; 
             color: var(--color-texto); 
             text-align: center; 
-            scroll-behavior: smooth; 
+            scroll-behavior: smooth;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background:
+                radial-gradient(circle at top left, rgba(134,163,151,0.22), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(181,157,126,0.18), transparent 55%),
+                url('https://www.transparenttextures.com/patterns/bright-floral.png');
+            opacity: 0.45;
         }
 
         /* --- SOBRE REALISTA --- */
@@ -482,7 +494,7 @@
             btn.disabled = true; btn.innerText = "Guardando...";
 
             // PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ:
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxTNVb9vW_CbqA5E10XW0W6B2_R4I6Z_Ejemplo_exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwUGZoeNWv4jb2d-qHCZbF_6kQ2TxXqtwqewvMsKg3RBtth0FG9THm5zqDkz827w7q5EQ/exec';
 
             // Para checkboxes múltiples
             const formData = new FormData(form);
