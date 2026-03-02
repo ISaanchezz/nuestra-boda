@@ -20,14 +20,26 @@
             margin: 0; 
             font-family: 'Playfair Display', serif; 
             background-color: var(--color-crema);
-            background-image: url('D15.jpg');
-            background-repeat: repeat;
-            background-size: 380px 380px;
             overflow-x: hidden; 
             color: var(--color-texto); 
             text-align: center; 
             scroll-behavior: smooth;
             min-height: 100vh;
+            position: relative;
+            z-index: 0;
+        }
+
+        /* Capa muy suave con la imagen de fondo */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url('D15.jpg');
+            background-repeat: repeat;
+            background-size: 380px 380px;
+            opacity: 0.08; /* Ajusta entre 0.03 y 0.15 según quieras */
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* --- SOBRE REALISTA --- */
