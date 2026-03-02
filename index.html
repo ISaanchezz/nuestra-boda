@@ -19,29 +19,15 @@
         body { 
             margin: 0; 
             font-family: 'Playfair Display', serif; 
-            background: var(--color-crema);
+            background-color: var(--color-crema);
+            background-image: url('fondo-eucalipto-boda.png');
+            background-repeat: repeat;
+            background-size: 380px 380px;
             overflow-x: hidden; 
             color: var(--color-texto); 
             text-align: center; 
             scroll-behavior: smooth;
-            position: relative;
             min-height: 100vh;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: -1;
-            background:
-                radial-gradient(circle at top left, rgba(134,163,151,0.4), transparent 55%),
-                radial-gradient(circle at bottom right, rgba(181,157,126,0.35), transparent 55%),
-                url('fondo-eucalipto-boda.png');
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            opacity: 0.95;
         }
 
         /* --- SOBRE REALISTA --- */
