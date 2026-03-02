@@ -254,6 +254,118 @@
             100% { opacity: 0; transform: translate(-50%, -46px) scale(1) rotate(10deg); }
         }
 
+        /* === NUESTRA HISTORIA CON REVEAL === */
+        .story-section {
+            margin-top: 120px;
+        }
+
+        .story-title {
+            font-family: 'Dancing Script';
+            font-size: 3rem;
+            color: var(--color-eucalipto);
+            margin-bottom: 70px;
+        }
+
+        .story-timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        /* Línea central */
+        .story-timeline::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--color-eucalipto);
+            transform: translateX(-50%);
+            opacity: 0.2;
+        }
+
+        .story-item {
+            position: relative;
+            width: 50%;
+            padding: 20px 40px;
+            box-sizing: border-box;
+        }
+
+        .story-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .story-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+
+        .story-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            transition: transform 0.6s ease, opacity 0.6s ease;
+        }
+
+        .story-year {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--color-dorado-suave);
+            font-weight: bold;
+        }
+
+        .story-content h3 {
+            font-family: 'Dancing Script';
+            font-size: 1.9rem;
+            color: var(--color-eucalipto);
+            margin: 10px 0;
+        }
+
+        .story-content p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Reveal inicial oculto */
+        .reveal-left,
+        .reveal-right {
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        .reveal-left { transform: translate(-26px, 60px); }
+        .reveal-right { transform: translate(26px, 60px); }
+
+        /* Activo al hacer scroll */
+        .reveal-active {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        /* Móvil */
+        @media (max-width: 768px) {
+            .story-timeline::before {
+                left: 20px;
+            }
+
+            .story-item {
+                width: 100%;
+                padding-left: 60px;
+                padding-right: 20px;
+                margin-bottom: 40px;
+                text-align: left !important;
+                left: 0 !important;
+            }
+
+            .story-title {
+                font-size: 2.6rem;
+                margin-bottom: 40px;
+            }
+        }
+
         /* --- ESTILO PLANNING --- */
         .timeline { display: flex; justify-content: space-around; flex-wrap: wrap; margin: 50px 0; position: relative; }
         .timeline-item { flex: 1; min-width: 150px; padding: 20px; position: relative; }
@@ -603,6 +715,60 @@
             <button type="button" class="btn-premium calendar-btn" onclick="downloadCalendar()">📅 Añadir al calendario</button>
         </header>
 
+        <div class="section story-section">
+            <h2 class="story-title">
+                Nuestra Historia 💚
+            </h2>
+
+            <div class="story-timeline">
+
+                <div class="story-item reveal-left">
+                    <div class="story-content">
+                        <span class="story-year">El comienzo</span>
+                        <h3>Cuando todo empezó</h3>
+                        <p>
+                            Sin saberlo, aquel día marcó el inicio de algo que cambiaría nuestras vidas.
+                            Una conversación, una sonrisa y esa sensación de que algo especial estaba naciendo.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="story-item reveal-right">
+                    <div class="story-content">
+                        <span class="story-year">Momentos inolvidables</span>
+                        <h3>Risas y aventuras</h3>
+                        <p>
+                            Viajes improvisados, planes que salieron mejor de lo esperado
+                            y el apoyo incondicional en cada paso.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="story-item reveal-left">
+                    <div class="story-content">
+                        <span class="story-year">La gran pregunta 💍</span>
+                        <h3>Un “sí” para toda la vida</h3>
+                        <p>
+                            En el momento perfecto, en el lugar perfecto, llegó la pregunta
+                            que lo cambiaría todo… y la respuesta fue un “sí” lleno de emoción.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="story-item reveal-right">
+                    <div class="story-content">
+                        <span class="story-year">26 de Junio de 2027</span>
+                        <h3>El siguiente capítulo</h3>
+                        <p>
+                            Ahora queremos celebrar con vosotros el inicio de nuestra nueva etapa.
+                            Gracias por formar parte de nuestra historia.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <div class="section" data-aos="fade-up">
             <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-eucalipto);">Timeline del día</h2>
             <div class="timeline">
@@ -673,6 +839,26 @@
             </div>
         </div>
 
+        <div class="section" data-aos="fade-up">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-eucalipto);">
+                🎧 Playlist de la Boda
+            </h2>
+            <p>¡Añade la canción que te hará darlo todo en la pista! 💃🔥</p>
+
+            <div style="background:white; padding:40px; border-radius:20px; box-shadow:0 15px 50px rgba(0,0,0,0.05); max-width:700px; margin:30px auto 0;">
+                <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1VR8LlNxhrrr3WjflKEWsp?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+                <a href="https://open.spotify.com/playlist/1VR8LlNxhrrr3WjflKEWsp" target="_blank" class="btn-premium" style="margin-top: 22px;">
+                    🎶 Abrir en Spotify
+                </a>
+
+                <p style="margin: 18px 0 0; color: #555; line-height: 1.55;">
+                    Solo canciones para la fiesta 🔥<br>
+                    Nada de baladas tristes 😅, Que siempre aparece el típico que mete 12 canciones de llorar 🤣
+                </p>
+            </div>
+        </div>
+
         <div class="section" data-aos="zoom-in" style="background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 650px;">
             <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📝 Confirmar Asistencia</h2>
             <form id="wedding-form">
@@ -739,26 +925,6 @@
         </div>
 
         <div class="section" data-aos="fade-up">
-            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-eucalipto);">
-                🎧 Playlist de la Boda
-            </h2>
-            <p>¡Añade la canción que te hará darlo todo en la pista! 💃🔥</p>
-
-            <div style="background:white; padding:40px; border-radius:20px; box-shadow:0 15px 50px rgba(0,0,0,0.05); max-width:700px; margin:30px auto 0;">
-                <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1VR8LlNxhrrr3WjflKEWsp?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-
-                <a href="https://open.spotify.com/playlist/1VR8LlNxhrrr3WjflKEWsp" target="_blank" class="btn-premium" style="margin-top: 22px;">
-                    🎶 Abrir en Spotify
-                </a>
-
-                <p style="margin: 18px 0 0; color: #555; line-height: 1.55;">
-                    Solo canciones para la fiesta 🔥<br>
-                    Nada de baladas tristes 😅, Que siempre aparece el típico que mete 12 canciones de llorar 🤣
-                </p>
-            </div>
-        </div>
-
-        <div class="section" data-aos="fade-up">
             <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-eucalipto);">🎁 Regalo</h2>
             <p>Vuestra presencia es lo más importante. Pero si queréis tener un detalle con nosotros:</p>
             <div style="background: white; border: 1px dashed var(--color-eucalipto); padding: 20px; border-radius: 10px; display: inline-block; letter-spacing: 2px; font-weight: bold; margin-top: 15px;">
@@ -770,6 +936,23 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
+
+        /* === Reveal Scroll Effect (Nuestra Historia) === */
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal-left, .reveal-right');
+
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('reveal-active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
 
         // Galería (lightbox)
         (function setupGallery() {
