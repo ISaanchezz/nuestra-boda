@@ -62,16 +62,30 @@
         }
 
         .card-invitation {
-            position: absolute; top: 15px; left: 30px;
+            position: absolute; top: 80px; left: 30px;
             width: 440px; height: 320px; background: #fff; z-index: 30;
             padding: 40px; box-sizing: border-box;
-            transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s;
+            transform: translateY(120px); /* empieza bien metida dentro del sobre */
+            transition: transform 0.8s ease-in-out, top 0.8s ease-in-out;
             border: 1px solid #eee;
         }
 
         .envelope.open .flap { transform: rotateX(180deg); z-index: 20; }
         .envelope.open .seal { opacity: 0; }
-        .envelope.open .card-invitation { transform: translateY(-300px); z-index: 100; }
+        /* primero la carta sube hacia arriba saliendo del sobre */
+        .envelope.open .card-invitation {
+            transform: translateY(-260px);
+            z-index: 100;
+        }
+
+        /* cuando el sobre desaparece, la tarjeta baja al centro de la pantalla */
+        .card-centered {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 1000 !important;
+        }
 
         /* --- CONTENIDO WEB --- */
         #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 60px 15px; }
@@ -81,6 +95,34 @@
 
         .section { margin: 100px auto; max-width: 900px; }
         
+        /* --- CONTADOR --- */
+        .countdown-wrapper {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .countdown-box {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            min-width: 90px;
+        }
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-eucalipto);
+            display: block;
+        }
+        .countdown-label {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--color-dorado-suave);
+        }
+
         /* --- ESTILO PLANNING --- */
         .timeline { display: flex; justify-content: space-around; flex-wrap: wrap; margin: 50px 0; position: relative; }
         .timeline-item { flex: 1; min-width: 150px; padding: 20px; position: relative; }
@@ -130,6 +172,24 @@
         <header data-aos="fade-down">
             <h1>Iván & Nuria</h1>
             <p class="gran-dia">26 DE JUNIO DE 2027</p>
+            <div class="countdown-wrapper">
+                <div class="countdown-box">
+                    <span id="days" class="countdown-number">0</span>
+                    <span class="countdown-label">DÍAS</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="hours" class="countdown-number">0</span>
+                    <span class="countdown-label">HORAS</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="mins" class="countdown-number">0</span>
+                    <span class="countdown-label">MINUTOS</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="secs" class="countdown-number">0</span>
+                    <span class="countdown-label">SEGUNDOS</span>
+                </div>
+            </div>
         </header>
 
         <div class="section" data-aos="fade-up">
@@ -262,27 +322,56 @@
         function openEnvelope() {
             const song = document.getElementById('wedding-song');
             
-            // ARREGLO 3: BAJAR VOLUMEN DE LA CANCIÓN
+            // Bajar volumen de la canción
             song.volume = 0.3; // Volumen al 30% (suave)
             song.play().catch(() => {});
 
-            document.getElementById('envelope').classList.add('open');
+            const envelope = document.getElementById('envelope');
+            const card = envelope.querySelector('.card-invitation');
+
+            // 1) Abrir solapa y hacer que la carta salga hacia arriba
+            envelope.classList.add('open');
+
+            // 2) Después de la animación de salida, colocar la carta centrada en pantalla
+            setTimeout(() => {
+                card.classList.add('card-centered');
+            }, 900); // un poco más que el transition de .card-invitation
+
+            // 3) Desvanecer el fondo del sobre y mostrar el contenido principal
             setTimeout(() => {
                 document.getElementById('wrapper').classList.add('hidden');
                 const content = document.getElementById('main-content');
                 content.style.display = 'block';
                 setTimeout(() => content.style.opacity = '1', 100);
-            }, 5500); 
+            }, 2000); 
         }
 
-        // Contador
-        const weddingDate = new Date("Sep 20, 2026 18:00:00").getTime();
-        setInterval(() => {
+        // Contador hasta la boda (26 junio 2027, 13:00)
+        const weddingDate = new Date("Jun 26, 2027 13:00:00").getTime();
+        const countdownInterval = setInterval(() => {
             const now = new Date().getTime();
             const d = weddingDate - now;
-            document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24));
-            document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("mins").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+
+            const daysEl = document.getElementById("days");
+            const hoursEl = document.getElementById("hours");
+            const minsEl = document.getElementById("mins");
+            const secsEl = document.getElementById("secs");
+
+            if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+            if (d <= 0) {
+                clearInterval(countdownInterval);
+                daysEl.innerText = "0";
+                hoursEl.innerText = "0";
+                minsEl.innerText = "0";
+                secsEl.innerText = "0";
+                return;
+            }
+
+            daysEl.innerText = Math.floor(d / (1000 * 60 * 60 * 24));
+            hoursEl.innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            minsEl.innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+            secsEl.innerText = Math.floor((d % (1000 * 60)) / 1000);
         }, 1000);
 
         // Envío Formulario Nativo
