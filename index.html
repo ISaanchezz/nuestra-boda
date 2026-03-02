@@ -20,4 +20,101 @@
         .envelope-wrapper { height: 100vh; display: flex; justify-content: center; align-items: center; cursor: pointer; perspective: 1500px; background: radial-gradient(circle, #fdfbf6 0%, #eaddca 100%); z-index: 100; transition: opacity 1s ease, visibility 1s ease; }
         .envelope-wrapper.hidden { opacity: 0; visibility: hidden; pointer-events: none; position: fixed; }
         .envelope { position: relative; width: 380px; height: 260px; background: var(--color-sobre-exterior); box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-radius: 5px; }
-        .envelope-flap { position: absolute; top: 0; left: 0; width: 0
+        .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-top: 150px solid var(--color-sobre-exterior); border-left: 190px solid transparent; border-right: 190px solid transparent; transform-origin: top; transition: transform 1s ease; z-index: 4; }
+        .envelope-front { position: absolute; bottom: 0; left: 0; width: 100%; height: 160px; background: var(--color-sobre-exterior); z-index: 3; }
+        .wax-seal { position: absolute; top: 125px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: var(--color-lacre); border-radius: 50%; z-index: 6; display: flex; justify-content: center; align-items: center; color: #f1dca7; font-size: 1.3rem; font-weight: bold; border: 2px solid #912424; transition: 0.5s; }
+        .invitation-card { position: absolute; top: 20px; left: 20px; width: 340px; height: 220px; background: #fff; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; transition: transform 1s ease; }
+        .envelope.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope.open .invitation-card { transform: translateY(-150px); z-index: 5; }
+        .envelope.open .wax-seal { opacity: 0; transform: translateX(-50%) scale(0); }
+
+        /* --- CONTENIDO --- */
+        #main-content { display: none; padding: 40px 20px; opacity: 0; transition: 1.5s; }
+        #main-content.visible { display: block; opacity: 1; }
+        h1 { font-size: 3.5rem; font-family: 'Dancing Script', cursive; color: #d4a373; margin-top: 0; }
+        .section { margin: 60px 0; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .btn-gps { display: inline-block; margin-top: 20px; padding: 12px 25px; background-color: #d4a373; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; font-family: sans-serif; font-size: 0.9rem; transition: 0.3s; }
+        .btn-gps:hover { background-color: #bc8a5f; transform: translateY(-2px); }
+
+        /* Responsive */
+        @media (max-width: 400px) { 
+            .envelope { width: 300px; height: 210px; } 
+            .invitation-card { width: 260px; height: 170px; } 
+            .envelope-flap { border-top-width: 120px; border-left-width: 150px; border-right-width: 150px; } 
+            .wax-seal { top: 100px; } 
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="wedding-song" src="musica.mp3" preload="auto" loop></audio>
+
+    <div class="envelope-wrapper" id="wrapper" onclick="openEnvelope()">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-front"></div>
+            <div class="wax-seal">I & N</div>
+            <div class="invitation-card">
+                <h2 style="font-family: 'Dancing Script'; color: #d4a373; margin: 0;">Bienvenidos a nuestra boda</h2>
+                <div style="font-size: 1.8rem; font-weight: bold; margin: 10px 0;">Iván & Nuria</div>
+                <p style="color: #888;">Toca para abrir</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <h1>🤵 Iván & Nuria 👰</h1>
+        
+        <div class="section">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.8rem; color: #d4a373;">📍 Localizaciones</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; padding: 0 10px;">
+                
+                <div style="flex: 1; min-width: 320px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 25px rgba(0,0,0,0.05);">
+                    <h3 style="color: #a52a2a; font-family: 'Dancing Script'; font-size: 2rem; margin-top: 0;">⛪ Ceremonia</h3>
+                    <p><strong>Ermita Nuestra Señora de los Remedios</strong></p>
+                    <p style="font-size: 0.85rem; color: #888;">Ctra. de la Adrada, 12B, Sotillo de la Adrada</p>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3039.421573030232!2d-4.5714081!3d40.2885994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd41465959f1a38f%3A0x620811adeb343ef5!2sErmita%20de%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="250" style="border:0; border-radius:10px;" allowfullscreen="" loading="lazy"></iframe>
+                    <a href="https://www.google.com/maps/dir//Ermita+de+Nuestra+Se%C3%B1ora+de+los+Remedios,+Ctra.+de+la+Adrada,+12B,+05420+Sotillo+de+la+Adrada,+%C3%81vila" target="_blank" class="btn-gps">🚗 GPS Ceremonia</a>
+                </div>
+
+                <div style="flex: 1; min-width: 320px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 25px rgba(0,0,0,0.05);">
+                    <h3 style="color: #a52a2a; font-family: 'Dancing Script'; font-size: 2rem; margin-top: 0;">🍴 Banquete</h3>
+                    <p><strong>Complejo Turístico La Cabaña</strong></p>
+                    <p style="font-size: 0.85rem; color: #888;">Carretera CL-501, km. 21.500, La Adrada</p>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3039.754728510842!2d-4.6469041!3d40.2811462!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4143ee49250981%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="250" style="border:0; border-radius:10px;" allowfullscreen="" loading="lazy"></iframe>
+                    <a href="https://www.google.com/maps/dir//Complejo+Tur%C3%ADstico+La+Caba%C3%B1a,+Carretera+CL-501,+km.+21.500,+05430+La+Adrada,+%C3%81vila" target="_blank" class="btn-gps">🚗 GPS Banquete</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="section" style="padding: 40px 15px; background: #fff; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 700px; margin-bottom: 100px;">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.8rem; color: #d4a373;">📝 Confirmación</h2>
+            <p style="font-style: italic; color: #888; margin-bottom: 25px;">Por favor, confírmanos tu asistencia</p>
+            <div style="position: relative; width: 100%; overflow: hidden; border-radius: 15px;">
+                <iframe src="https://tally.so/r/ZjNNL0" width="100%" height="1000" frameborder="0" style="border: none; background: transparent;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            // 1. Iniciar animación del sobre
+            document.getElementById('envelope').classList.add('open');
+            
+            // 2. Intentar reproducir música
+            const song = document.getElementById('wedding-song');
+            song.play().catch(e => console.log("Música activada tras interacción"));
+
+            // 3. Pasar al contenido principal
+            setTimeout(() => {
+                document.getElementById('wrapper').classList.add('hidden');
+                const content = document.getElementById('main-content');
+                content.classList.add('visible');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1800);
+        }
+    </script>
+</body>
+</html>
