@@ -35,10 +35,10 @@
             pointer-events: none;
             z-index: -1;
             background:
-                radial-gradient(circle at top left, rgba(134,163,151,0.22), transparent 55%),
-                radial-gradient(circle at bottom right, rgba(181,157,126,0.18), transparent 55%),
-                url('https://www.transparenttextures.com/patterns/bright-floral.png');
-            opacity: 0.45;
+                radial-gradient(circle at top left, rgba(134,163,151,0.35), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(181,157,126,0.3), transparent 55%),
+                url('https://www.transparenttextures.com/patterns/elegant-dots.png');
+            opacity: 0.85;
         }
 
         /* --- SOBRE REALISTA --- */
@@ -255,6 +255,35 @@
             margin: 0;
         }
 
+        /* Fuegos artificiales al enviar formulario */
+        .fireworks-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2500;
+            overflow: hidden;
+        }
+        .firework-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-dorado-suave);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: firework-burst 1.2s ease-out forwards;
+        }
+        @keyframes firework-burst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(0.5);
+                opacity: 0;
+            }
+        }
+
         @media (max-width: 550px) {
             .envelope { width: 340px; height: 240px; }
             .flap { border-top-width: 140px; border-left-width: 170px; border-right-width: 170px; }
@@ -410,8 +439,8 @@
                 <button type="submit" id="submit-btn" class="btn-premium" style="width:100%">ENVIAR CONFIRMACIÓN</button>
             </form>
             <div id="success-msg" style="display:none; padding:30px;">
-                <h3 style="font-family:'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado);">¡Gracias! ✨</h3>
-                <p>Tu respuesta se ha guardado en nuestro Excel.</p>
+                <h3 style="font-family:'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado);">¡Muchas Gracias! ✨</h3>
+                <p>Tu respuesta se ha guardado.</p>
             </div>
         </div>
 
@@ -486,6 +515,46 @@
             secsEl.innerText = Math.floor((d % (1000 * 60)) / 1000);
         }, 1000);
 
+        function launchFireworks() {
+            const container = document.createElement('div');
+            container.className = 'fireworks-container';
+            document.body.appendChild(container);
+
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            const bursts = 4;
+            const particlesPerBurst = 25;
+            const colors = ['#b59d7e', '#ffffff', '#f9f7f2', '#86a397'];
+
+            for (let i = 0; i < bursts; i++) {
+                const centerX = Math.random() * width * 0.8 + width * 0.1;
+                const centerY = Math.random() * height * 0.4 + height * 0.1;
+
+                for (let j = 0; j < particlesPerBurst; j++) {
+                    const p = document.createElement('div');
+                    p.className = 'firework-particle';
+
+                    const angle = (Math.PI * 2 * j) / particlesPerBurst;
+                    const distance = 80 + Math.random() * 60;
+                    const dx = Math.cos(angle) * distance;
+                    const dy = Math.sin(angle) * distance;
+
+                    p.style.left = `${centerX}px`;
+                    p.style.top = `${centerY}px`;
+                    p.style.setProperty('--dx', `${dx}px`);
+                    p.style.setProperty('--dy', `${dy}px`);
+                    p.style.backgroundColor = colors[(i + j) % colors.length];
+
+                    container.appendChild(p);
+                }
+            }
+
+            setTimeout(() => {
+                container.remove();
+            }, 1500);
+        }
+
         // Envío Formulario Nativo
         const form = document.getElementById('wedding-form');
         form.addEventListener('submit', e => {
@@ -493,16 +562,15 @@
             const btn = document.getElementById('submit-btn');
             btn.disabled = true; btn.innerText = "Guardando...";
 
-            // PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ:
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwUGZoeNWv4jb2d-qHCZbF_6kQ2TxXqtwqewvMsKg3RBtth0FG9THm5zqDkz827w7q5EQ/exec';
 
-            // Para checkboxes múltiples
             const formData = new FormData(form);
             const preferences = formData.getAll('Preferencia').join(', ');
             formData.set('Preferencia', preferences); 
 
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(() => {
+                    launchFireworks();
                     form.style.display = 'none';
                     document.getElementById('success-msg').style.display = 'block';
                 })
