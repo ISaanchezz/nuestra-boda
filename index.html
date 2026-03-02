@@ -226,6 +226,22 @@
         /* Formulario */
         .form-container { background: white; padding: 50px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; border: 1px solid #eee; }
         input, select { width: 100%; padding: 12px; margin: 10px 0 20px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px 20px;
+            text-align: left;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .checkbox-item input {
+            width: auto;
+            margin: 0;
+        }
 
         @media (max-width: 550px) {
             .envelope { width: 340px; height: 240px; }
@@ -326,18 +342,18 @@
             <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📝 Confirmar Asistencia</h2>
             <form id="wedding-form">
                 <div class="form-group">
-                    <label>Nombre y Apellidos</label>
+                    <label>👤 Nombre y Apellidos</label>
                     <input type="text" name="Nombre" required>
                 </div>
                 <div class="form-group">
-                    <label>¿Contamos contigo?</label>
+                    <label>✅ ¿Contamos contigo?</label>
                     <select name="Asistencia" required>
                         <option value="Sí">¡Sí, allí estaré!</option>
                         <option value="No">Lo siento, no podré ir</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>¿Traes acompañantes?</label>
+                    <label>👥 ¿Traes acompañantes?</label>
                     <select id="has-partner" name="Acompañante_SiNo" onchange="togglePartner()">
                         <option value="No">No</option>
                         <option value="Sí">Sí</option>
@@ -345,38 +361,38 @@
                 </div>
                 <div id="partner-details" style="display:none; background: #fdfaf5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                     <div class="form-group">
-                        <label>¿Cuántos acompañantes?</label>
+                        <label>👥 ¿Cuántos acompañantes?</label>
                         <input type="number" name="Num_Acompañantes" value="1" min="1">
                     </div>
                     <div class="form-group">
-                        <label>Nombres de acompañantes</label>
+                        <label>📝 Nombres de acompañantes</label>
                         <input type="text" name="Nombres_Acompañantes">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Preferencias Alimentarias (puedes elegir varias)</label>
+                    <label>🍽️ Preferencias Alimentarias (puedes elegir varias)</label>
                     <div class="checkbox-group">
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Ninguna">Ninguna</div>
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Celíaco">Celíaco</div>
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegano">Vegano</div>
-                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegetariano">Vegetariano</div>
+                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Ninguna"><span>🙂 Ninguna</span></div>
+                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Celíaco"><span>🌾🚫 Celíaco</span></div>
+                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegano"><span>🌱 Vegano</span></div>
+                        <div class="checkbox-item"><input type="checkbox" name="Preferencia" value="Vegetariano"><span>🥦 Vegetariano</span></div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Otras Alergias / Notas</label>
+                    <label>⚠️ Otras Alergias / Notas</label>
                     <input type="text" name="Alergias">
                 </div>
                 <div class="form-group">
-                    <label>¿Necesitas plaza de Autobús?</label>
+                    <label>🚌 ¿Necesitas plaza de Autobús?</label>
                     <select name="Autobus">
                         <option value="No">No</option>
                         <option value="Sí">Sí</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>¿Qué canción te haría bailar?</label>
+                    <label>🎵 ¿Qué canción te haría bailar?</label>
                     <input type="text" name="Cancion">
                 </div>
                 <button type="submit" id="submit-btn" class="btn-premium" style="width:100%">ENVIAR CONFIRMACIÓN</button>
