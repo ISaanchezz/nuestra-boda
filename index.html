@@ -16,7 +16,18 @@
             --color-acento: #86a397; /* Verde clarito para detalles */
         }
 
-        body { margin: 0; font-family: 'Playfair Display', serif; background: var(--color-crema); overflow-x: hidden; color: var(--color-texto); text-align: center; scroll-behavior: smooth; }
+        body { 
+            margin: 0; 
+            font-family: 'Playfair Display', serif; 
+            background:
+                radial-gradient(circle at top left, rgba(134,163,151,0.25), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(181,157,126,0.18), transparent 55%),
+                var(--color-crema);
+            overflow-x: hidden; 
+            color: var(--color-texto); 
+            text-align: center; 
+            scroll-behavior: smooth; 
+        }
 
         /* --- SOBRE ESTILO EUCALIPTO --- */
         .envelope-wrapper {
@@ -132,6 +143,12 @@
 
         /* Tarjetas de Mapas */
         .card-map { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); flex: 1; min-width: 320px; border-top: 5px solid var(--color-eucalipto); }
+        .card-map iframe {
+            width: 100%;
+            height: 260px;
+            border: 0;
+            border-radius: 10px;
+        }
         .btn-premium { display: inline-block; padding: 14px 30px; background: var(--color-eucalipto); color: white; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-top: 20px; border: none; cursor: pointer; }
         .btn-premium:hover { background: var(--color-acento); transform: translateY(-2px); }
 
@@ -224,13 +241,13 @@
                 <div class="card-map">
                     <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">⛪Ceremonia</h3>
                     <p>Ermita de Nuestra Señora</p>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.2335021405365!2d-4.58928219250982!3d40.292774073459505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd40467159f1a18f%3A0x6208116ea7ee3e51!2sErmita%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1772467146818!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.2335021405365!2d-4.58928219250982!3d40.292774073459505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd40467159f1a18f%3A0x6208116ea7ee3e51!2sErmita%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1772467146818!5m2!1ses!2ses" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     <a href="https://maps.app.goo.gl/yg7W6ejZNtKeHVqU8" target="_blank" class="btn-premium">MAPS</a>
                 </div>
                 <div class="card-map">
                     <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">🍴Banquete</h3>
                     <p>Finca La Cabaña</p>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3042.4688290406557!2d-4.659024623479326!3d40.30975146214264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4043ee35250981%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1772464832762!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3042.4688290406557!2d-4.659024623479326!3d40.30975146214264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4043ee35250981%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1772464832762!5m2!1ses!2ses" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     <a href="https://maps.app.goo.gl/oi8AyMj2UqSt2MgW7" target="_blank" class="btn-premium">MAPS</a>
                 </div>
             </div>
