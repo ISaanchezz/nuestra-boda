@@ -12,12 +12,12 @@
             --color-sobre: #decba4;
             --color-lacre: #8b1e1e;
             --color-dorado: #d4a373;
-            --color-texto: #606c38;
+            --color-texto: #4a4e3d;
         }
 
-        body { margin: 0; font-family: 'Playfair Display', serif; background: #fdfaf5; overflow-x: hidden; color: var(--color-texto); text-align: center; }
+        body { margin: 0; font-family: 'Playfair Display', serif; background: #fdfaf5; overflow-x: hidden; color: var(--color-texto); text-align: center; scroll-behavior: smooth; }
 
-        /* --- SOBRE ARREGLADO (MÁS ROBUSTO) --- */
+        /* --- SOBRE REALISTA --- */
         .envelope-wrapper {
             height: 100vh; display: flex; justify-content: center; align-items: center;
             background: #f4f1ea; perspective: 1500px; z-index: 1000;
@@ -26,64 +26,72 @@
         .envelope-wrapper.hidden { opacity: 0; pointer-events: none; visibility: hidden; position: fixed; }
 
         .envelope {
-            position: relative; width: 500px; height: 350px;
+            position: relative; width: 450px; height: 300px;
             background: var(--color-sobre); box-shadow: 0 30px 60px rgba(0,0,0,0.15);
             cursor: pointer; border-radius: 4px;
         }
 
         .flap {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border-top: 190px solid #d4c197; border-left: 250px solid transparent; border-right: 250px solid transparent;
+            border-top: 170px solid #d4c197; border-left: 225px solid transparent; border-right: 225px solid transparent;
             transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 50;
         }
 
         .front {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; z-index: 40;
         }
-        .front::before { content: ""; position: absolute; bottom: 0; left: 0; border-bottom: 220px solid #e7d8b8; border-right: 250px solid transparent; }
-        .front::after { content: ""; position: absolute; bottom: 0; right: 0; border-bottom: 220px solid #e7d8b8; border-left: 250px solid transparent; }
+        .front::before { content: ""; position: absolute; bottom: 0; left: 0; border-bottom: 210px solid #e7d8b8; border-right: 225px solid transparent; }
+        .front::after { content: ""; position: absolute; bottom: 0; right: 0; border-bottom: 210px solid #e7d8b8; border-left: 225px solid transparent; }
         .front-base { position: absolute; bottom: 0; left: 0; width: 100%; height: 100px; background: #e7d8b8; z-index: 40; border-radius: 0 0 4px 4px; }
 
         .seal {
-            position: absolute; top: 165px; left: 50%; transform: translateX(-50%);
-            width: 75px; height: 75px; background: var(--color-lacre); border-radius: 50%;
+            position: absolute; top: 140px; left: 50%; transform: translateX(-50%);
+            width: 70px; height: 70px; background: var(--color-lacre); border-radius: 50%;
             z-index: 60; display: flex; justify-content: center; align-items: center;
-            color: #f3e5ab; font-weight: bold; font-size: 1.6rem; border: 2px solid #721616;
+            color: #f3e5ab; font-weight: bold; font-size: 1.5rem; border: 2px solid #721616;
+            transition: 0.5s;
         }
 
-        .card {
-            position: absolute; top: 10px; left: 25px; width: 450px; height: 330px;
-            background: #fff; z-index: 30; padding: 40px; box-sizing: border-box;
+        .card-invitation {
+            position: absolute; top: 10px; left: 25px; width: 400px; height: 280px;
+            background: #fff; z-index: 30; padding: 30px; box-sizing: border-box;
             transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
         }
 
         .envelope.open .flap { transform: rotateX(180deg); z-index: 20; }
         .envelope.open .seal { opacity: 0; }
-        .envelope.open .card { transform: translateY(-280px); z-index: 100; }
+        .envelope.open .card-invitation { transform: translateY(-220px); z-index: 100; }
 
         /* --- WEB CONTENT --- */
-        #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 50px 20px; }
-        h1 { font-family: 'Dancing Script'; font-size: 4.5rem; color: var(--color-dorado); margin: 0; }
-        .section { margin: 80px auto; max-width: 1000px; }
+        #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 40px 15px; }
+        h1 { font-family: 'Dancing Script'; font-size: 4rem; color: var(--color-dorado); margin: 0; }
+        .section { margin: 60px auto; max-width: 900px; }
 
         /* Timeline */
-        .timeline { display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 40px auto; text-align: left; }
+        .timeline { display: flex; flex-direction: column; gap: 15px; max-width: 450px; margin: 30px auto; text-align: left; }
         .timeline-item { display: flex; align-items: center; gap: 20px; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
         .timeline-time { font-weight: bold; color: var(--color-dorado); min-width: 60px; }
 
         /* Contador */
-        .timer-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-width: 80px; }
-        .timer-num { display: block; font-size: 2.5rem; font-weight: bold; color: var(--color-dorado); }
+        .timer-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); min-width: 70px; }
+        .timer-num { display: block; font-size: 2rem; font-weight: bold; color: var(--color-dorado); }
 
-        .btn-premium { display: inline-block; padding: 15px 35px; background: var(--color-dorado); color: white; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 20px; transition: 0.3s; }
-        .btn-premium:hover { transform: scale(1.05); background: #bc8a5f; }
+        .btn-premium { display: inline-block; padding: 14px 30px; background: var(--color-dorado); color: white; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 15px; transition: 0.3s; border: none; font-family: inherit; font-size: 1rem; cursor: pointer; }
+        .btn-premium:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 163, 115, 0.4); }
 
-        @media (max-width: 550px) {
-            .envelope { width: 340px; height: 240px; }
-            .flap { border-top-width: 130px; border-left-width: 170px; border-right-width: 170px; }
+        /* Formulario Estilos */
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
+
+        @media (max-width: 500px) {
+            .envelope { width: 320px; height: 220px; }
+            .flap { border-top-width: 120px; border-left-width: 160px; border-right-width: 160px; }
             .front::before, .front::after { border-bottom-width: 150px; }
-            .card { width: 300px; height: 210px; }
-            .seal { top: 110px; width: 60px; height: 60px; }
+            .card-invitation { width: 280px; height: 180px; left: 20px; }
+            .seal { top: 100px; width: 60px; height: 60px; }
+            h1 { font-size: 2.8rem; }
         }
     </style>
 </head>
@@ -97,84 +105,146 @@
             <div class="front"></div>
             <div class="front-base"></div>
             <div class="seal">I & N</div>
-            <div class="card">
-                <h2 style="font-family: 'Dancing Script'; color: var(--color-dorado);">¡Bienvenidos!</h2>
-                <div style="font-size: 2.2rem; margin: 20px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 15px 0;">Iván & Nuria</div>
-                <p>Toca para abrir</p>
+            <div class="card-invitation">
+                <h2 style="font-family: 'Dancing Script'; color: var(--color-dorado); margin: 0;">¡Nos Casamos!</h2>
+                <div style="font-size: 1.8rem; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">Iván & Nuria</div>
+                <p style="color: #999; font-size: 0.9rem;">Toca para abrir la invitación</p>
             </div>
         </div>
     </div>
 
     <div id="main-content">
-        <h1 data-aos="fade-up">Iván & Nuria</h1>
-        <p style="letter-spacing: 5px; color: #888; margin-bottom: 40px;">NUESTRO GRAN DÍA</p>
+        <h1 data-aos="fade-down">Iván & Nuria</h1>
+        <p style="letter-spacing: 5px; color: #888; margin-bottom: 40px;">20 DE SEPTIEMBRE DE 2026</p>
 
         <div data-aos="zoom-in">
-            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+Iván+y+Nuria&dates=20260920T170000Z/20260921T040000Z&details=¡Os+esperamos!&location=Ermita+Ntra+Sra+de+los+Remedios" target="_blank" class="btn-premium" style="background: #606c38;">📅 Añadir al Calendario</a>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+Iván+y+Nuria&dates=20260920T170000Z/20260921T040000Z&details=¡No+faltéis!&location=Ermita+Ntra+Sra+de+los+Remedios" target="_blank" class="btn-premium" style="background: #606c38; font-size: 0.8rem;">📅 AÑADIR AL CALENDARIO</a>
         </div>
 
         <div class="section" data-aos="fade-up">
-            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado);">⏳ Solo faltan...</h2>
-            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+            <div style="display: flex; justify-content: center; gap: 15px;">
                 <div class="timer-box"><span id="days" class="timer-num">00</span><small>Días</small></div>
-                <div class="timer-box"><span id="hours" class="timer-num">00</span><small>Hs</small></div>
+                <div class="timer-box"><span id="hours" class="timer-num">00</span><small>Horas</small></div>
                 <div class="timer-box"><span id="mins" class="timer-num">00</span><small>Min</small></div>
             </div>
         </div>
 
         <div class="section" data-aos="fade-right">
-            <h2 style="font-family: 'Dancing Script'; font-size: 3rem;">🕒 Cronograma del día</h2>
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado);">🕒 Cronograma</h2>
             <div class="timeline">
-                <div class="timeline-item"> <span class="timeline-time">18:00</span> <span>⛪ Ceremonia Religiosa</span> </div>
-                <div class="timeline-item"> <span class="timeline-time">19:30</span> <span>🥂 Cóctel de Bienvenida</span> </div>
-                <div class="timeline-item"> <span class="timeline-time">21:00</span> <span>🍴 Cena y Celebración</span> </div>
-                <div class="timeline-item"> <span class="timeline-time">23:30</span> <span>🕺 ¡Fiesta y Barra Libre!</span> </div>
+                <div class="timeline-item"><span class="timeline-time">18:00</span><span>⛪ Ceremonia en la Ermita</span></div>
+                <div class="timeline-item"><span class="timeline-time">19:30</span><span>🥂 Cóctel en La Cabaña</span></div>
+                <div class="timeline-item"><span class="timeline-time">21:00</span><span>🍴 Cena de Gala</span></div>
+                <div class="timeline-item"><span class="timeline-time">23:30</span><span>🕺 Fiesta y Barra Libre</span></div>
             </div>
         </div>
 
         <div class="section" data-aos="fade-up">
-            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📍 Localizaciones</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px;">
-                <div style="background: white; padding: 25px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">Ceremonia ⛪</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.9535300000003!2d-4.562366!3d40.2767099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd40465971b1e38f%3A0x6220116eaeefa951!2sErmita%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="200" style="border-radius: 10px; border: none;"></iframe>
-                    <a href="https://maps.app.goo.gl/uP4V2T6S2y6u4p1B9" target="_blank" class="btn-premium">Ver GPS</a>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                <div style="background: white; padding: 20px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">La Ceremonia ⛪</h3>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.618684784964!2d-4.5516999!3d40.284242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd411f5d63f0d55d%3A0x67332f7488e0e0a!2sErmita%20de%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="200" style="border-radius: 10px; border:none;"></iframe>
+                    <a href="https://maps.app.goo.gl/3" target="_blank" class="btn-premium">Cómo llegar</a>
                 </div>
-                <div style="background: white; padding: 25px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">Banquete 🥂</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.433!2d-4.636!3d40.298!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4043ee47352481%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="200" style="border-radius: 10px; border: none;"></iframe>
-                    <a href="https://maps.app.goo.gl/9tHq8fX7y9GzC9W66" target="_blank" class="btn-premium">Ver GPS</a>
+                <div style="background: white; padding: 20px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">El Banquete 🥂</h3>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3044.22567484964!2d-4.502345!3d40.298765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd411e5a55d55d55%3A0x5a55d55d55d55d55!2sLa%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="200" style="border-radius: 10px; border:none;"></iframe>
+                    <a href="https://maps.app.goo.gl/7" target="_blank" class="btn-premium">Cómo llegar</a>
                 </div>
             </div>
         </div>
 
-        <div class="section" data-aos="zoom-in" style="background: white; padding: 40px 10px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05);">
-            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📝 Confirmación</h2>
-            <iframe src="https://tally.so/r/ZjNNL0" width="100%" height="800" frameborder="0"></iframe>
+        <div class="section" data-aos="zoom-in" style="background: white; padding: 35px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 600px;">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.8rem; color: var(--color-dorado);">Confirmar Asistencia</h2>
+            <form id="wedding-form">
+                <div class="form-group">
+                    <label>Nombre y Apellidos</label>
+                    <input type="text" name="Nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>¿Asistirás?</label>
+                    <select name="Asistencia" required>
+                        <option value="Sí">Sí, ¡con muchas ganas!</option>
+                        <option value="No">No, me es imposible</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>¿Vienes con acompañante?</label>
+                    <select id="has-partner" name="Acompañante_SiNo" onchange="togglePartner()">
+                        <option value="No">No</option>
+                        <option value="Sí">Sí</option>
+                    </select>
+                </div>
+                <div id="partner-details" style="display:none; background: #fdfaf5; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label>¿Cuántos acompañantes?</label>
+                        <input type="number" name="Num_Acompañantes" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombres de acompañantes</label>
+                        <input type="text" name="Nombres_Acompañantes">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Preferencia Alimentaria</label>
+                    <select name="Preferencia">
+                        <option value="Ninguna">Ninguna</option>
+                        <option value="Celíaco">Celíaco</option>
+                        <option value="Vegano">Vegano</option>
+                        <option value="Vegetariano">Vegetariano</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Alergias / Otras notas</label>
+                    <input type="text" name="Alergias">
+                </div>
+                <div class="form-group">
+                    <label>¿Necesitas Autobús?</label>
+                    <select name="Autobus">
+                        <option value="No">No</option>
+                        <option value="Sí">Sí</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Canción que no puede faltar</label>
+                    <input type="text" name="Cancion">
+                </div>
+                <button type="submit" id="submit-btn" class="btn-premium" style="width:100%">ENVIAR CONFIRMACIÓN</button>
+            </form>
+            <div id="success-msg" style="display:none; padding:20px;">
+                <h3 style="font-family:'Dancing Script'; font-size: 2rem;">¡Gracias! ✨</h3>
+                <p>Tu respuesta se ha guardado en nuestro Excel.</p>
+            </div>
         </div>
 
-        <div class="section" data-aos="fade-up" style="margin-top: 100px; padding: 40px; border-top: 1px solid #ddd;">
-            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem;">🎁 Regalo</h2>
-            <p>Vuestra presencia es el mejor regalo, pero si deseáis ayudarnos con nuestro viaje...</p>
-            <div style="background: #eee; padding: 20px; border-radius: 10px; font-family: monospace; font-size: 1.2rem; display: inline-block; margin-top: 10px;">
+        <div class="section" data-aos="fade-up" style="margin-top: 80px; padding: 40px 10px; border-top: 1px solid #eee;">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado);">🎁 Regalo</h2>
+            <p>Vuestra presencia es nuestro mejor regalo. Pero si deseáis tener un detalle con nosotros para nuestra luna de miel:</p>
+            <div style="background: #f4f1ea; padding: 20px; border-radius: 15px; display: inline-block; font-family: monospace; font-size: 1.1rem; margin-top: 15px;">
                 ES00 0000 0000 0000 0000 0000 </div>
-            <p style="font-size: 0.8rem; margin-top: 10px;">Titulares: Iván y Nuria</p>
+            <p style="font-size: 0.8rem; color: #999; margin-top: 10px;">Titulares: Iván y Nuria</p>
         </div>
+
     </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 1000 });
+        AOS.init({ duration: 1000, once: true });
+
+        function togglePartner() {
+            const val = document.getElementById('has-partner').value;
+            document.getElementById('partner-details').style.display = (val === 'Sí') ? 'block' : 'none';
+        }
 
         function openEnvelope() {
             document.getElementById('envelope').classList.add('open');
-            document.getElementById('wedding-song').play().catch(e => {});
-
+            document.getElementById('wedding-song').play().catch(() => {});
             setTimeout(() => {
                 document.getElementById('wrapper').classList.add('hidden');
-                document.getElementById('main-content').style.display = 'block';
-                setTimeout(() => { document.getElementById('main-content').style.opacity = '1'; }, 100);
-            }, 5500); 
+                const content = document.getElementById('main-content');
+                content.style.display = 'block';
+                setTimeout(() => content.style.opacity = '1', 100);
+            }, 5000); 
         }
 
         // Contador
@@ -186,6 +256,27 @@
             document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("mins").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
         }, 1000);
+
+        // Envío Formulario
+        const form = document.getElementById('wedding-form');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true; btn.innerText = "Enviando...";
+
+            // PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ ABAJO:
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwUGZoeNWv4jb2d-qHCZbF_6kQ2TxXqtwqewvMsKg3RBtth0FG9THm5zqDkz827w7q5EQ/exec';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(() => {
+                    form.style.display = 'none';
+                    document.getElementById('success-msg').style.display = 'block';
+                })
+                .catch(() => {
+                    alert('Error al enviar. Prueba de nuevo.');
+                    btn.disabled = false; btn.innerText = "ENVIAR CONFIRMACIÓN";
+                });
+        });
     </script>
 </body>
 </html>
