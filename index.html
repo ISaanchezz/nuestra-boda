@@ -5,120 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boda de Iván & Nuria</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
-        /* --- ARCHIVO CSS PROFESIONAL --- */
         :root {
-            --color-sobre: #decba4; /* Color lino más realista */
+            --color-sobre: #decba4;
             --color-lacre: #8b1e1e;
             --color-dorado: #d4a373;
+            --color-texto: #606c38;
         }
 
-        body { margin: 0; font-family: 'Playfair Display', serif; background: #fdfaf5; overflow-x: hidden; }
+        body { margin: 0; font-family: 'Playfair Display', serif; background: #fdfaf5; overflow-x: hidden; color: var(--color-texto); text-align: center; }
 
-        /* Contenedor del Sobre */
+        /* --- SOBRE ARREGLADO (MÁS ROBUSTO) --- */
         .envelope-wrapper {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f4f1ea;
-            perspective: 1500px;
-            z-index: 1000;
-            transition: opacity 1.2s ease;
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            background: #f4f1ea; perspective: 1500px; z-index: 1000;
+            transition: opacity 1.2s ease 0.8s;
         }
+        .envelope-wrapper.hidden { opacity: 0; pointer-events: none; visibility: hidden; position: fixed; }
 
         .envelope {
-            position: relative;
-            width: 450px;
-            height: 300px;
-            background: var(--color-sobre);
-            box-shadow: 0 30px 50px rgba(0,0,0,0.2);
-            cursor: pointer;
-            border-radius: 4px;
+            position: relative; width: 500px; height: 350px;
+            background: var(--color-sobre); box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            cursor: pointer; border-radius: 4px;
         }
 
-        /* Tapa del sobre (Solapa) */
         .flap {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border-top: 170px solid #d4c197; /* Un poco más oscuro para dar relieve */
-            border-left: 225px solid transparent;
-            border-right: 225px solid transparent;
-            transform-origin: top;
-            transition: transform 0.8s ease-in-out;
-            z-index: 50; /* Por encima del frontal al inicio */
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-top: 190px solid #d4c197; border-left: 250px solid transparent; border-right: 250px solid transparent;
+            transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 50;
         }
 
-        /* Parte frontal del sobre (Lo que tapa la carta) */
         .front {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 0; height: 0;
-            border-bottom: 150px solid var(--color-sobre);
-            border-left: 225px solid #e7d8b8;
-            border-right: 225px solid #e7d8b8;
-            z-index: 40; /* Tapa la tarjeta */
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; z-index: 40;
         }
-        
-        .front::after {
-            content: "";
-            position: absolute;
-            bottom: -150px; left: -225px;
-            width: 450px; height: 150px;
-            background: var(--color-sobre);
-        }
+        .front::before { content: ""; position: absolute; bottom: 0; left: 0; border-bottom: 220px solid #e7d8b8; border-right: 250px solid transparent; }
+        .front::after { content: ""; position: absolute; bottom: 0; right: 0; border-bottom: 220px solid #e7d8b8; border-left: 250px solid transparent; }
+        .front-base { position: absolute; bottom: 0; left: 0; width: 100%; height: 100px; background: #e7d8b8; z-index: 40; border-radius: 0 0 4px 4px; }
 
-        /* Lacre */
         .seal {
-            position: absolute;
-            top: 145px; left: 50%;
-            transform: translateX(-50%);
-            width: 70px; height: 70px;
-            background: var(--color-lacre);
-            border-radius: 50%;
-            z-index: 60;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-            display: flex; justify-content: center; align-items: center;
-            color: #f3e5ab; font-weight: bold; font-size: 1.5rem;
-            border: 2px solid #721616;
-            transition: all 0.5s ease;
+            position: absolute; top: 165px; left: 50%; transform: translateX(-50%);
+            width: 75px; height: 75px; background: var(--color-lacre); border-radius: 50%;
+            z-index: 60; display: flex; justify-content: center; align-items: center;
+            color: #f3e5ab; font-weight: bold; font-size: 1.6rem; border: 2px solid #721616;
         }
 
-        /* La Invitación */
         .card {
-            position: absolute;
-            top: 10px; left: 25px;
-            width: 400px; height: 280px;
-            background: #fff;
-            z-index: 30; /* Oculta detrás del frontal */
-            padding: 30px;
-            box-sizing: border-box;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; justify-content: center;
+            position: absolute; top: 10px; left: 25px; width: 450px; height: 330px;
+            background: #fff; z-index: 30; padding: 40px; box-sizing: border-box;
             transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s;
         }
 
-        /* ANIMACIÓN AL ABRIR */
         .envelope.open .flap { transform: rotateX(180deg); z-index: 20; }
-        .envelope.open .seal { opacity: 0; transform: translateX(-50%) scale(0); }
-        .envelope.open .card { transform: translateY(-220px); z-index: 100; }
+        .envelope.open .seal { opacity: 0; }
+        .envelope.open .card { transform: translateY(-280px); z-index: 100; }
 
-        /* Contenido de la Web */
-        #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 40px 20px; }
-        .card-map { background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); flex: 1; min-width: 320px; border: 1px solid #eee; }
-        .section { margin: 80px auto; max-width: 950px; }
-        h1 { font-family: 'Dancing Script'; font-size: 4rem; color: var(--color-dorado); }
-        .btn-gps { display: inline-block; margin-top: 20px; padding: 15px 30px; background: var(--color-dorado); color: white; border-radius: 50px; text-decoration: none; font-weight: bold; }
+        /* --- WEB CONTENT --- */
+        #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 50px 20px; }
+        h1 { font-family: 'Dancing Script'; font-size: 4.5rem; color: var(--color-dorado); margin: 0; }
+        .section { margin: 80px auto; max-width: 1000px; }
 
-        @media (max-width: 500px) {
-            .envelope { width: 320px; height: 220px; }
-            .flap { border-top-width: 120px; border-left-width: 160px; border-right-width: 160px; }
-            .front { border-bottom-width: 110px; border-left-width: 160px; border-right-width: 160px; }
-            .front::after { width: 320px; height: 110px; bottom: -110px; left: -160px; }
-            .card { width: 280px; height: 180px; }
-            .seal { top: 100px; width: 55px; height: 55px; }
+        /* Timeline */
+        .timeline { display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 40px auto; text-align: left; }
+        .timeline-item { display: flex; align-items: center; gap: 20px; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        .timeline-time { font-weight: bold; color: var(--color-dorado); min-width: 60px; }
+
+        /* Contador */
+        .timer-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-width: 80px; }
+        .timer-num { display: block; font-size: 2.5rem; font-weight: bold; color: var(--color-dorado); }
+
+        .btn-premium { display: inline-block; padding: 15px 35px; background: var(--color-dorado); color: white; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 20px; transition: 0.3s; }
+        .btn-premium:hover { transform: scale(1.05); background: #bc8a5f; }
+
+        @media (max-width: 550px) {
+            .envelope { width: 340px; height: 240px; }
+            .flap { border-top-width: 130px; border-left-width: 170px; border-right-width: 170px; }
+            .front::before, .front::after { border-bottom-width: 150px; }
+            .card { width: 300px; height: 210px; }
+            .seal { top: 110px; width: 60px; height: 60px; }
         }
     </style>
 </head>
@@ -130,119 +95,97 @@
         <div class="envelope" id="envelope" onclick="openEnvelope()">
             <div class="flap"></div>
             <div class="front"></div>
+            <div class="front-base"></div>
             <div class="seal">I & N</div>
             <div class="card">
-                <h2 style="font-family: 'Dancing Script'; color: var(--color-dorado); margin:0;">¡Bienvenidos!</h2>
-                <div style="font-size: 2rem; margin: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0;">Iván & Nuria</div>
-                <p style="font-size: 0.9rem; color: #999; letter-spacing: 2px;">Toca para descubrirlo todo</p>
+                <h2 style="font-family: 'Dancing Script'; color: var(--color-dorado);">¡Bienvenidos!</h2>
+                <div style="font-size: 2.2rem; margin: 20px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 15px 0;">Iván & Nuria</div>
+                <p>Toca para abrir</p>
             </div>
         </div>
     </div>
 
     <div id="main-content">
-        <h1>Iván & Nuria</h1>
-        <p style="letter-spacing: 4px; color: #888;">NUESTRO GRAN DÍA</p>
+        <h1 data-aos="fade-up">Iván & Nuria</h1>
+        <p style="letter-spacing: 5px; color: #888; margin-bottom: 40px;">NUESTRO GRAN DÍA</p>
 
-        <div class="section" id="cuenta-atras" style="margin-bottom: 80px;">
-    <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado); margin-bottom: 30px;">⏳ Solo faltan...</h2>
-    <div id="timer" style="display: flex; justify-content: center; gap: 20px; font-family: 'Playfair Display', serif;">
-        <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-width: 80px;">
-            <span id="days" style="display: block; font-size: 2.5rem; font-weight: bold; color: var(--color-dorado);">00</span>
-            <small style="color: #999; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px;">Días</small>
+        <div data-aos="zoom-in">
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+Iván+y+Nuria&dates=20260920T170000Z/20260921T040000Z&details=¡Os+esperamos!&location=Ermita+Ntra+Sra+de+los+Remedios" target="_blank" class="btn-premium" style="background: #606c38;">📅 Añadir al Calendario</a>
         </div>
-        <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-width: 80px;">
-            <span id="hours" style="display: block; font-size: 2.5rem; font-weight: bold; color: var(--color-dorado);">00</span>
-            <small style="color: #999; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px;">Horas</small>
-        </div>
-        <div style="background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-width: 80px;">
-            <span id="minutes" style="display: block; font-size: 2.5rem; font-weight: bold; color: var(--color-dorado);">00</span>
-            <small style="color: #999; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px;">Minutos</small>
-        </div>
-    </div>
-</div>
 
-        <div class="section">
-            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📍 Localizaciones</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top: 40px;">
-                
-                <div class="card-map">
-                    <h3 style="font-family: 'Dancing Script'; font-size: 2.2rem; margin-top: 0;">⛪ La Ceremonia</h3>
-                    <p><strong>Ermita Ntra. Sra. de los Remedios</strong></p>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.9535300000003!2d-4.562366!3d40.2767099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd40465971b1e38f%3A0x6220116eaeefa951!2sErmita%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="250" style="border:0; border-radius:15px;"></iframe>
-                    <a href="https://maps.app.goo.gl/uP4V2T6S2y6u4p1B9" target="_blank" class="btn-gps">🚗 Cómo llegar</a>
-                </div>
-
-                <div class="card-map">
-                    <h3 style="font-family: 'Dancing Script'; font-size: 2.2rem; margin-top: 0;">🥂 El Banquete</h3>
-                    <p><strong>Complejo Turístico La Cabaña</strong></p>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.433!2d-4.636!3d40.298!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4043ee47352481%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="250" style="border:0; border-radius:15px;"></iframe>
-                    <a href="https://maps.app.goo.gl/9tHq8fX7y9GzC9W66" target="_blank" class="btn-gps">🚗 Cómo llegar</a>
-                </div>
-
+        <div class="section" data-aos="fade-up">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-dorado);">⏳ Solo faltan...</h2>
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+                <div class="timer-box"><span id="days" class="timer-num">00</span><small>Días</small></div>
+                <div class="timer-box"><span id="hours" class="timer-num">00</span><small>Hs</small></div>
+                <div class="timer-box"><span id="mins" class="timer-num">00</span><small>Min</small></div>
             </div>
         </div>
 
-        <div class="section" style="background: white; padding: 50px 20px; border-radius: 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.05);">
-            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📝 Confirmar Asistencia</h2>
-            <iframe src="https://tally.so/r/ZjNNL0" width="100%" height="800" frameborder="0" style="border:none;"></iframe>
+        <div class="section" data-aos="fade-right">
+            <h2 style="font-family: 'Dancing Script'; font-size: 3rem;">🕒 Cronograma del día</h2>
+            <div class="timeline">
+                <div class="timeline-item"> <span class="timeline-time">18:00</span> <span>⛪ Ceremonia Religiosa</span> </div>
+                <div class="timeline-item"> <span class="timeline-time">19:30</span> <span>🥂 Cóctel de Bienvenida</span> </div>
+                <div class="timeline-item"> <span class="timeline-time">21:00</span> <span>🍴 Cena y Celebración</span> </div>
+                <div class="timeline-item"> <span class="timeline-time">23:30</span> <span>🕺 ¡Fiesta y Barra Libre!</span> </div>
+            </div>
+        </div>
+
+        <div class="section" data-aos="fade-up">
+            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📍 Localizaciones</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px;">
+                <div style="background: white; padding: 25px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">Ceremonia ⛪</h3>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.9535300000003!2d-4.562366!3d40.2767099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd40465971b1e38f%3A0x6220116eaeefa951!2sErmita%20Nuestra%20Se%C3%B1ora%20de%20los%20Remedios!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="200" style="border-radius: 10px; border: none;"></iframe>
+                    <a href="https://maps.app.goo.gl/uP4V2T6S2y6u4p1B9" target="_blank" class="btn-premium">Ver GPS</a>
+                </div>
+                <div style="background: white; padding: 25px; border-radius: 20px; flex: 1; min-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <h3 style="font-family: 'Dancing Script'; font-size: 2rem;">Banquete 🥂</h3>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.433!2d-4.636!3d40.298!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4043ee47352481%3A0x1d3a0b92e9446449!2sComplejo%20Tur%C3%ADstico%20La%20Caba%C3%B1a!5e0!3m2!1ses!2ses!4v1700000000000" width="100%" height="200" style="border-radius: 10px; border: none;"></iframe>
+                    <a href="https://maps.app.goo.gl/9tHq8fX7y9GzC9W66" target="_blank" class="btn-premium">Ver GPS</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-aos="zoom-in" style="background: white; padding: 40px 10px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05);">
+            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📝 Confirmación</h2>
+            <iframe src="https://tally.so/r/ZjNNL0" width="100%" height="800" frameborder="0"></iframe>
+        </div>
+
+        <div class="section" data-aos="fade-up" style="margin-top: 100px; padding: 40px; border-top: 1px solid #ddd;">
+            <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem;">🎁 Regalo</h2>
+            <p>Vuestra presencia es el mejor regalo, pero si deseáis ayudarnos con nuestro viaje...</p>
+            <div style="background: #eee; padding: 20px; border-radius: 10px; font-family: monospace; font-size: 1.2rem; display: inline-block; margin-top: 10px;">
+                ES00 0000 0000 0000 0000 0000 </div>
+            <p style="font-size: 0.8rem; margin-top: 10px;">Titulares: Iván y Nuria</p>
         </div>
     </div>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        /* --- ARCHIVO JAVASCRIPT PROFESIONAL --- */
+        AOS.init({ duration: 1000 });
+
         function openEnvelope() {
-            const envelope = document.getElementById('envelope');
-            const wrapper = document.getElementById('wrapper');
-            const mainContent = document.getElementById('main-content');
-            const song = document.getElementById('wedding-song');
+            document.getElementById('envelope').classList.add('open');
+            document.getElementById('wedding-song').play().catch(e => {});
 
-            // 1. Abrir el sobre
-            envelope.classList.add('open');
-            
-            // 2. Reproducir música
-            song.play().catch(e => console.log("Interacción necesaria"));
-
-            // 3. Darle 4 segundos para que se vean los nombres (1.2s de subida + 2.8s de pausa)
             setTimeout(() => {
-                wrapper.style.opacity = '0';
-                
-                setTimeout(() => {
-                    wrapper.style.display = 'none';
-                    mainContent.style.display = 'block';
-                    
-                    // Entrada suave de la web
-                    setTimeout(() => {
-                        mainContent.style.opacity = '1';
-                    }, 100);
-                }, 1200);
-
-            }, 4000); 
+                document.getElementById('wrapper').classList.add('hidden');
+                document.getElementById('main-content').style.display = 'block';
+                setTimeout(() => { document.getElementById('main-content').style.opacity = '1'; }, 100);
+            }, 5500); 
         }
 
-        // --- LÓGICA DEL CONTADOR DINÁMICO ---
-const weddingDate = new Date("26 Junio, 2027 13:00:00").getTime(); // <--- CAMBIA TU FECHA AQUÍ
-
-const timerUpdate = setInterval(function() {
-    const now = new Date().getTime();
-    const distance = weddingDate - now;
-
-    // Cálculos de tiempo
-    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-    // Inyectar en el HTML
-    document.getElementById("days").innerText = d < 10 ? "0" + d : d;
-    document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
-    document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
-
-    // Si la fecha ya pasó
-    if (distance < 0) {
-        clearInterval(timerUpdate);
-        document.getElementById("cuenta-atras").innerHTML = "<h2 style='font-family: \"Dancing Script\"'>¡Hoy es el gran día! ❤️</h2>";
-    }
-}, 1000);
+        // Contador
+        const weddingDate = new Date("Sep 20, 2026 18:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const d = weddingDate - now;
+            document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("mins").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+        }, 1000);
     </script>
 </body>
 </html>
-
