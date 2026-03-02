@@ -122,9 +122,10 @@
             top: 155px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
+            width: auto;
+            min-width: 60px;
             height: 60px;
-            border-radius: 50%;
+            border-radius: 999px;
             background: var(--color-crema);
             color: var(--color-eucalipto);
             display: flex;
@@ -135,6 +136,11 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.2);
             z-index: 6;
             transition: opacity 0.5s ease, transform 0.5s ease;
+            font-size: 0.95rem;
+            padding: 0 10px;
+            text-align: center;
+            box-sizing: border-box;
+            white-space: nowrap;
         }
 
         .card-invitation {
@@ -756,9 +762,10 @@
             }
             .envelope-seal {
                 top: 115px;
-                width: 52px;
+                min-width: 52px;
                 height: 52px;
                 font-size: 0.85rem;
+                padding: 0 8px;
             }
             .card-invitation {
                 width: calc(100% - 40px);
@@ -777,20 +784,20 @@
             .timeline {
                 flex-direction: column;
                 align-items: center;
-                gap: 18px;
-                margin: 40px 0 10px;
+                gap: 14px;
+                margin: 32px 0 6px;
             }
             .timeline-item {
                 flex: none;
                 width: 100%;
-                max-width: 420px;
+                max-width: 100%;
                 background: #fff;
-                border-radius: 16px;
-                padding: 18px 18px;
+                border-radius: 14px;
+                padding: 14px 14px;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             }
-            .time { font-size: 1.05rem; }
-            .event { font-size: 1.7rem; }
+            .time { font-size: 0.95rem; }
+            .event { font-size: 1.4rem; }
 
             /* Botones más grandes (tap-friendly) */
             .btn-premium {
@@ -866,7 +873,7 @@
         <div class="envelope" id="envelope" onclick="openEnvelope()">
             <div class="envelope-flap"></div>
             <div class="envelope-front"></div>
-            <div class="envelope-seal">I & N</div>
+            <div class="envelope-seal" id="envelope-seal">I & N</div>
             <div class="card-invitation">
                 <h2>¡Nos Casamos!</h2>
                 <div class="names">Iván & Nuria</div>
@@ -1138,6 +1145,25 @@
 
         window.addEventListener('scroll', revealOnScroll);
         window.addEventListener('load', revealOnScroll);
+
+        function personalizeEnvelope() {
+            const params = new URLSearchParams(window.location.search);
+            const guest = params.get('invitado');
+
+            if (guest) {
+                const decodedName = decodeURIComponent(guest);
+                const seal = document.getElementById('envelope-seal');
+                if (!seal) return;
+
+                const shortName = decodedName.length > 12
+                    ? decodedName.substring(0, 12) + "…"
+                    : decodedName;
+
+                seal.textContent = shortName;
+            }
+        }
+
+        window.addEventListener('load', personalizeEnvelope);
 
         /* Pétalos suaves al hacer scroll (muy sutil) */
         (function setupPetalsOnScroll() {
