@@ -615,6 +615,110 @@
             background: rgba(134, 163, 151, 0.95);
             transform: translateY(-1px);
         }
+
+        /* WhatsApp flotante (contactos) */
+        .whatsapp-float {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 2700;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .whatsapp-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: #25D366;
+            color: #fff;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+            transition: transform 0.15s ease, filter 0.2s ease;
+        }
+        .whatsapp-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.98);
+        }
+        .whatsapp-panel {
+            width: min(320px, calc(100vw - 32px));
+            background: rgba(255,255,255,0.98);
+            border-radius: 18px;
+            box-shadow: 0 18px 55px rgba(0,0,0,0.14);
+            padding: 16px 16px 14px;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            backdrop-filter: blur(6px);
+        }
+        .whatsapp-float.open .whatsapp-panel {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .wa-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .wa-title {
+            font-family: 'Dancing Script';
+            font-size: 1.8rem;
+            color: var(--color-eucalipto);
+            line-height: 1.1;
+        }
+        .wa-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(45, 76, 65, 0.08);
+            color: var(--color-eucalipto);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .wa-desc {
+            margin: 0 0 12px;
+            color: #555;
+            line-height: 1.45;
+            font-size: 0.95rem;
+        }
+        .wa-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .wa-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: rgba(37, 211, 102, 0.12);
+            color: #128C7E;
+            border: 1px solid rgba(18, 140, 126, 0.18);
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+        .wa-link:hover {
+            transform: translateY(-1px);
+            background: rgba(37, 211, 102, 0.16);
+        }
         @keyframes firework-burst {
             0% {
                 transform: translate(0, 0) scale(1);
@@ -708,6 +812,16 @@
                 right: 14px;
             }
 
+            .whatsapp-float {
+                right: 14px;
+                bottom: 14px;
+            }
+            .whatsapp-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 1.45rem;
+            }
+
             /* Galería en móvil */
             .gallery-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -723,6 +837,21 @@
 
     <audio id="wedding-song" src="musica.mp3" preload="auto" loop></audio>
     <button id="music-toggle" aria-label="Silenciar música" title="Silenciar música">🔊</button>
+
+    <div id="whatsapp-float" class="whatsapp-float open">
+        <button id="wa-toggle" class="whatsapp-btn" type="button" aria-label="Cerrar contactos de WhatsApp" title="Cerrar">💬</button>
+        <div id="wa-panel" class="whatsapp-panel" role="dialog" aria-label="Nuestros contactos" aria-hidden="false">
+            <div class="wa-header">
+                <div class="wa-title">Nuestros contactos</div>
+                <button id="wa-close" class="wa-close" type="button" aria-label="Cerrar">✕</button>
+            </div>
+            <p class="wa-desc">Si necesitas decirnos algo aquí están nuestros números.</p>
+            <div class="wa-actions">
+                <a href="https://wa.me/34608008978" target="_blank" rel="noopener noreferrer" class="wa-link">Iván</a>
+                <a href="https://wa.me/34691883708" target="_blank" rel="noopener noreferrer" class="wa-link">Nuria</a>
+            </div>
+        </div>
+    </div>
 
     <div id="lightbox" class="lightbox" aria-hidden="true">
         <div class="lightbox-content" role="dialog" aria-label="Imagen ampliada">
@@ -1009,6 +1138,112 @@
 
         window.addEventListener('scroll', revealOnScroll);
         window.addEventListener('load', revealOnScroll);
+
+        /* Pétalos suaves al hacer scroll (muy sutil) */
+        (function setupPetalsOnScroll() {
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) return;
+
+            const layer = document.createElement('div');
+            layer.className = 'petal-layer';
+            document.body.appendChild(layer);
+
+            let lastSpawnAt = 0;
+            let lastScrollY = window.scrollY || 0;
+
+            function spawnPetal(intensity = 1) {
+                const p = document.createElement('div');
+                p.className = 'petal';
+
+                const size = 10 + Math.random() * 10; // 10-20px
+                const left = Math.random() * 100; // vw
+                const drift = (Math.random() * 140 - 70).toFixed(0) + 'px';
+                const rot = (Math.random() * 360).toFixed(0) + 'deg';
+                const dur = (6.6 + Math.random() * 3.6 + intensity * 0.4).toFixed(2) + 's';
+                const opacity = (0.22 + Math.random() * 0.22).toFixed(2);
+
+                p.style.left = left + 'vw';
+                p.style.setProperty('--petal-size', size + 'px');
+                p.style.setProperty('--petal-drift', drift);
+                p.style.setProperty('--petal-rot', rot);
+                p.style.setProperty('--petal-dur', dur);
+                p.style.setProperty('--petal-opacity', opacity);
+
+                layer.appendChild(p);
+
+                const cleanupMs = Math.ceil(parseFloat(dur) * 1000) + 200;
+                setTimeout(() => p.remove(), cleanupMs);
+            }
+
+            function onScroll() {
+                const now = Date.now();
+                const y = window.scrollY || 0;
+                const delta = Math.abs(y - lastScrollY);
+                lastScrollY = y;
+
+                if (delta < 12) return;
+                if (now - lastSpawnAt < 220) return;
+
+                const chance = Math.min(0.22, 0.06 + delta / 900);
+                if (Math.random() > chance) return;
+
+                lastSpawnAt = now;
+                spawnPetal(delta > 140 ? 2 : 1);
+                if (delta > 220 && Math.random() < 0.35) spawnPetal(1);
+
+                const maxPetals = 18;
+                while (layer.childElementCount > maxPetals) {
+                    layer.firstElementChild?.remove();
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+        })();
+
+        // WhatsApp flotante (contactos)
+        (function setupWhatsAppFloat() {
+            const wrap = document.getElementById('whatsapp-float');
+            const panel = document.getElementById('wa-panel');
+            const toggle = document.getElementById('wa-toggle');
+            const closeBtn = document.getElementById('wa-close');
+            if (!wrap || !panel || !toggle || !closeBtn) return;
+
+            function open() {
+                wrap.classList.add('open');
+                panel.setAttribute('aria-hidden', 'false');
+                toggle.setAttribute('aria-label', 'Cerrar contactos de WhatsApp');
+                toggle.setAttribute('title', 'Cerrar');
+            }
+
+            function close() {
+                wrap.classList.remove('open');
+                panel.setAttribute('aria-hidden', 'true');
+                toggle.setAttribute('aria-label', 'Abrir contactos de WhatsApp');
+                toggle.setAttribute('title', 'WhatsApp');
+            }
+
+            toggle.addEventListener('click', () => {
+                if (wrap.classList.contains('open')) close();
+                else open();
+            });
+            closeBtn.addEventListener('click', close);
+
+            document.addEventListener('keydown', (e) => {
+                if (!wrap.classList.contains('open')) return;
+                if (e.key === 'Escape') close();
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!wrap.classList.contains('open')) return;
+                const target = e.target;
+                if (!(target instanceof Node)) return;
+                if (wrap.contains(target)) return;
+                close();
+            });
+
+            // Arranca abierto (para que se vean los botones)
+            open();
+        })();
 
         // Galería (lightbox)
         (function setupGallery() {
