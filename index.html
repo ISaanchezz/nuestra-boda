@@ -51,10 +51,11 @@
             background: #e8e4db;
             perspective: 1500px;
             z-index: 1000;
-            transition: opacity 1.2s ease 0.8s;
+            transition: opacity 1.2s ease 0.8s, filter 1.2s ease 0.8s;
         }
         .envelope-wrapper.hidden {
             opacity: 0;
+            filter: blur(10px);
             pointer-events: none;
             visibility: hidden;
             position: fixed;
@@ -180,6 +181,13 @@
             left: 50% !important;
             transform: translate(-50%, -50%) !important;
             z-index: 1500 !important;
+            transition: transform 0.9s ease, opacity 0.9s ease;
+        }
+
+        /* animación de la carta hacia el header */
+        .card-to-header {
+            transform: translate(-50%, -130%) scale(0.6) !important;
+            opacity: 0;
         }
 
         /* --- CONTENIDO WEB --- */
@@ -236,6 +244,12 @@
         .btn-premium { display: inline-block; padding: 14px 30px; background: var(--color-eucalipto); color: white; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-top: 20px; border: none; cursor: pointer; }
         .btn-premium:hover { background: var(--color-acento); transform: translateY(-2px); }
 
+        .calendar-btn {
+            margin-top: 35px;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
         /* Formulario */
         .form-container { background: white; padding: 50px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; border: 1px solid #eee; }
         input, select { width: 100%; padding: 12px; margin: 10px 0 20px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
@@ -273,6 +287,37 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             opacity: 0;
             animation: firework-burst 1.2s ease-out forwards;
+        }
+
+        /* Botón flotante control música */
+        #music-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(45, 76, 65, 0.9);
+            color: #fff;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+            z-index: 2600;
+            transition: background 0.2s ease, transform 0.15s ease, opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        #music-toggle.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #music-toggle:hover {
+            background: rgba(134, 163, 151, 0.95);
+            transform: translateY(-1px);
         }
         @keyframes firework-burst {
             0% {
@@ -330,6 +375,7 @@
 <body>
 
     <audio id="wedding-song" src="musica.mp3" preload="auto" loop></audio>
+    <button id="music-toggle" aria-label="Silenciar música" title="Silenciar música">🔊</button>
 
     <div class="envelope-wrapper" id="wrapper">
         <div class="envelope" id="envelope" onclick="openEnvelope()">
@@ -366,6 +412,7 @@
                     <span class="countdown-label">SEGUNDOS</span>
                 </div>
             </div>
+            <button type="button" class="btn-premium calendar-btn" onclick="downloadCalendar()">📅 Añadir al calendario</button>
         </header>
 
         <div class="section" data-aos="fade-up">
@@ -490,6 +537,32 @@
     <script>
         AOS.init({ duration: 1000, once: true });
 
+        function downloadCalendar() {
+            const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Boda Ivan y Nuria//ES
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+DTSTAMP:20260302T120000Z
+DTSTART:20270626T130000
+DTEND:20270626T230000
+SUMMARY:Boda de Iván y Nuria
+LOCATION:Ermita de Nuestra Señora de los Remedios; Finca La Cabaña
+DESCRIPTION:Ceremonia: Ermita de Nuestra Señora de los Remedios.\\nBanquete: Finca La Cabaña.
+END:VEVENT
+END:VCALENDAR`;
+
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'boda-ivan-nuria.ics';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         function togglePartner() {
             const val = document.getElementById('has-partner').value;
             document.getElementById('partner-details').style.display = (val === 'Sí') ? 'block' : 'none';
@@ -502,22 +575,35 @@
 
             const envelope = document.getElementById('envelope');
             const card = envelope.querySelector('.card-invitation');
+            const musicToggle = document.getElementById('music-toggle');
+            const wrapper = document.getElementById('wrapper');
 
             // 1) abrir el sobre y hacer que la carta salga hacia arriba
             envelope.classList.add('open');
+            // mostrar control de música cuando empieza a sonar
+            if (musicToggle) {
+                musicToggle.classList.add('visible');
+            }
 
             // 2) cuando ha terminado de salir del sobre, colocarla en el centro de la pantalla
             setTimeout(() => {
                 card.classList.add('card-centered');
             }, 900);
 
-            // 3) desvanecer el sobre y mostrar el contenido principal
+            // 3) animar la carta hacia la parte superior simulando que se convierte en el header
             setTimeout(() => {
-                document.getElementById('wrapper').classList.add('hidden');
+                card.classList.add('card-to-header');
+            }, 1600);
+
+            // 4) desvanecer el sobre con blur y mostrar el contenido principal
+            setTimeout(() => {
+                if (wrapper) {
+                    wrapper.classList.add('hidden');
+                }
                 const content = document.getElementById('main-content');
                 content.style.display = 'block';
                 setTimeout(() => content.style.opacity = '1', 100);
-            }, 2000);
+            }, 2200);
         }
 
         // Contador hasta la boda (26 junio 2027, 13:00)
@@ -587,6 +673,28 @@
                 container.remove();
             }, 1500);
         }
+
+        // Control de música flotante
+        (function setupMusicToggle() {
+            const song = document.getElementById('wedding-song');
+            const musicToggle = document.getElementById('music-toggle');
+            if (!song || !musicToggle) return;
+
+            musicToggle.addEventListener('click', () => {
+                if (song.paused) {
+                    song.play().then(() => {
+                        musicToggle.textContent = '🔊';
+                        musicToggle.setAttribute('aria-label', 'Silenciar música');
+                        musicToggle.setAttribute('title', 'Silenciar música');
+                    }).catch(() => {});
+                } else {
+                    song.pause();
+                    musicToggle.textContent = '🔇';
+                    musicToggle.setAttribute('aria-label', 'Reanudar música');
+                    musicToggle.setAttribute('title', 'Reanudar música');
+                }
+            });
+        })();
 
         // Envío Formulario Nativo
         const form = document.getElementById('wedding-form');
