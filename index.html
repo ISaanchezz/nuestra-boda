@@ -16,7 +16,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-192x192.png">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <style>
         :root {
             --color-eucalipto: #2d4c41; /* Verde oscuro de la foto */
@@ -26,13 +26,13 @@
             --color-acento: #86a397; /* Verde clarito para detalles */
         }
 
-        body { 
-            margin: 0; 
-            font-family: 'Playfair Display', serif; 
+        body {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
             background-color: var(--color-crema);
-            overflow-x: hidden; 
-            color: var(--color-texto); 
-            text-align: center; 
+            overflow-x: hidden;
+            color: var(--color-texto);
+            text-align: center;
             scroll-behavior: smooth;
             min-height: 100vh;
             position: relative;
@@ -135,7 +135,7 @@
             letter-spacing: 1px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.2);
             z-index: 6;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition: all 0.4s ease;
             font-size: 0.95rem;
             padding: 0 10px;
             text-align: center;
@@ -208,12 +208,12 @@
 
         /* --- CONTENIDO WEB --- */
         #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 60px 15px; }
-        
+
         h1 { font-family: 'Dancing Script'; font-size: 5rem; color: var(--color-eucalipto); margin: 0; }
         .gran-dia { letter-spacing: 5px; color: var(--color-dorado-suave); font-weight: bold; margin-bottom: 50px; }
 
         .section { margin: 100px auto; max-width: 900px; }
-        
+
         /* --- CONTADOR --- */
         .countdown-wrapper {
             margin-top: 40px;
@@ -1160,7 +1160,11 @@
                         ? decodedName.substring(0, 12) + "…"
                         : decodedName;
 
-                    seal.textContent = shortName;
+                    seal.style.opacity = "0";
+                    setTimeout(() => {
+                        seal.textContent = shortName;
+                        seal.style.opacity = "1";
+                    }, 200);
                 }
 
                 // 2) Autorrellenar formulario
@@ -1508,7 +1512,7 @@ END:VCALENDAR`;
 
             const formData = new FormData(form);
             const preferences = formData.getAll('Preferencia').join(', ');
-            formData.set('Preferencia', preferences); 
+            formData.set('Preferencia', preferences);
 
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(() => {
