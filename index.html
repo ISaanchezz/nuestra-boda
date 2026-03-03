@@ -400,6 +400,73 @@
         .btn-premium { display: inline-block; padding: 14px 30px; background: var(--color-eucalipto); color: white; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; margin-top: 20px; border: none; cursor: pointer; }
         .btn-premium:hover { background: var(--color-acento); transform: translateY(-2px); }
 
+        /* Caja IBAN regalo */
+        .gift-iban-box {
+            background: white;
+            border: 1px dashed var(--color-eucalipto);
+            padding: 18px 20px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+        .gift-iban-code {
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: var(--color-eucalipto);
+            user-select: all;
+            font-size: 0.98rem;
+        }
+        .gift-iban-copy-btn {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: none;
+            background: var(--color-eucalipto);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+        .gift-iban-copy-btn:hover {
+            background: var(--color-acento);
+            transform: translateY(-1px);
+        }
+        .gift-iban-msg {
+            font-size: 0.8rem;
+            color: var(--color-acento);
+            margin-left: 6px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        /* Botón fijo Confirmar asistencia (base oculto, solo móvil) */
+        #floating-confirm-btn {
+            position: fixed;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            z-index: 2800;
+            padding: 14px 20px;
+            border-radius: 999px;
+            border: none;
+            background: var(--color-eucalipto);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+            cursor: pointer;
+            display: none;
+        }
+
         .calendar-btn {
             margin-top: 35px;
             font-size: 0.95rem;
@@ -778,7 +845,7 @@
 
             /* Más aire general en móvil */
             #main-content { padding: 80px 16px; }
-            .section { margin: 130px auto; }
+            .section { margin: 170px auto; }
 
             /* Timeline vertical (más legible) */
             .timeline {
@@ -829,6 +896,11 @@
                 font-size: 1.45rem;
             }
 
+            /* Mostrar botón fijo Confirmar asistencia solo en móvil */
+            #floating-confirm-btn {
+                display: block;
+            }
+
             /* Galería en móvil */
             .gallery-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -868,6 +940,11 @@
             <img class="lightbox-img" alt="Imagen ampliada">
         </div>
     </div>
+
+    <!-- Botón fijo Confirmar asistencia (solo móvil) -->
+    <button type="button" id="floating-confirm-btn">
+        Confirmar asistencia
+    </button>
 
     <div class="envelope-wrapper" id="wrapper">
         <div class="envelope" id="envelope" onclick="openEnvelope()">
@@ -1051,7 +1128,7 @@
             </div>
         </div>
 
-        <div class="section" data-aos="zoom-in" style="background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 650px;">
+        <div id="confirmar-asistencia" class="section" data-aos="zoom-in" style="background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.05); max-width: 650px;">
             <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--color-dorado);">📝 Confirmar Asistencia</h2>
             <form id="wedding-form">
                 <div class="form-group">
@@ -1119,8 +1196,14 @@
         <div class="section" data-aos="fade-up">
             <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-eucalipto);">🎁 Regalo</h2>
             <p>Vuestra presencia es lo más importante. Pero si queréis tener un detalle con nosotros:</p>
-            <div style="background: white; border: 1px dashed var(--color-eucalipto); padding: 20px; border-radius: 10px; display: inline-block; letter-spacing: 2px; font-weight: bold; margin-top: 15px;">
-                ES00 0000 0000 0000 0000 0000
+            <div class="gift-iban-box">
+                <span id="gift-iban" class="gift-iban-code">
+                    ES00 0000 0000 0000 0000 0000
+                </span>
+                <button type="button" class="gift-iban-copy-btn" id="gift-iban-copy-btn">
+                    📋 Copiar
+                </button>
+                <span class="gift-iban-msg" id="gift-iban-msg">Copiado ✔</span>
             </div>
         </div>
     </div>
@@ -1521,6 +1604,57 @@ END:VCALENDAR`;
                     btn.disabled = false; btn.innerText = "ENVIAR CONFIRMACIÓN";
                 });
         });
+
+        // Copiar IBAN regalo
+        (function setupGiftIbanCopy() {
+            const btn = document.getElementById('gift-iban-copy-btn');
+            const ibanEl = document.getElementById('gift-iban');
+            const msgEl = document.getElementById('gift-iban-msg');
+            if (!btn || !ibanEl || !msgEl) return;
+
+            const iban = ibanEl.textContent.replace(/\s+/g, '');
+
+            function showMessage() {
+                msgEl.style.opacity = '1';
+                clearTimeout(msgEl._hideTimeout);
+                msgEl._hideTimeout = setTimeout(() => {
+                    msgEl.style.opacity = '0';
+                }, 1800);
+            }
+
+            async function copyIban() {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(iban);
+                    } else {
+                        const area = document.createElement('textarea');
+                        area.value = iban;
+                        area.style.position = 'fixed';
+                        area.style.opacity = '0';
+                        document.body.appendChild(area);
+                        area.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(area);
+                    }
+                    showMessage();
+                } catch (e) {
+                    alert('No se pudo copiar. Puedes copiarlo manualmente.');
+                }
+            }
+
+            btn.addEventListener('click', copyIban);
+        })();
+
+        // Botón fijo Confirmar asistencia (scroll al formulario)
+        (function setupFloatingConfirm() {
+            const btn = document.getElementById('floating-confirm-btn');
+            const target = document.getElementById('confirmar-asistencia');
+            if (!btn || !target) return;
+
+            btn.addEventListener('click', () => {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        })();
     </script>
 </body>
 </html>
