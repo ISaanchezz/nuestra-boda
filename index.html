@@ -446,6 +446,26 @@
             transition: opacity 0.2s ease;
         }
 
+        /* Barra de progreso scroll */
+        .scroll-progress-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: transparent;
+            z-index: 3000;
+            pointer-events: none;
+        }
+        .scroll-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--color-eucalipto), var(--color-dorado-suave));
+            box-shadow: 0 0 8px rgba(0,0,0,0.25);
+            transform-origin: left center;
+            transition: width 0.12s ease-out;
+        }
+
         /* Botón fijo Confirmar asistencia (base oculto, solo móvil) */
         #floating-confirm-btn {
             position: fixed;
@@ -909,6 +929,10 @@
 </head>
 <body>
 
+    <div class="scroll-progress-wrapper">
+        <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
+    </div>
+
     <audio id="wedding-song" src="musica.mp3" preload="auto" loop></audio>
     <button id="music-toggle" aria-label="Silenciar música" title="Silenciar música">🔊</button>
 
@@ -1171,10 +1195,25 @@
                 </div>
                 <div class="form-group">
                     <label>🚌 ¿Necesitas plaza de Autobús?</label>
-                    <select name="Autobus">
+                    <select id="bus-select" name="Autobus" onchange="toggleBusDetails()">
                         <option value="No">No</option>
                         <option value="Sí">Sí</option>
                     </select>
+                </div>
+                <div id="bus-details" style="display:none; background:#fdfaf5; padding:20px; border-radius:10px; margin-bottom:20px;">
+                    <p style="margin-top:0; font-weight:bold;">🚌 Más detalle del autobús</p>
+                    <div class="form-group">
+                        <label>⏰ Hora de salida</label>
+                        <input type="text" name="Bus_HoraSalida" placeholder="Ej: 12:00 desde Talavera">
+                    </div>
+                    <div class="form-group">
+                        <label>📍 Punto de recogida</label>
+                        <input type="text" name="Bus_PuntoRecogida" placeholder="Ej: Plaza de Toros, Talavera">
+                    </div>
+                    <div class="form-group">
+                        <label>🔁 Regreso</label>
+                        <input type="text" name="Bus_Regreso" placeholder="Ej: Regreso al final de la fiesta">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>🎵 ¿Qué canción te haría bailar?</label>
@@ -1447,6 +1486,13 @@ END:VCALENDAR`;
             document.getElementById('partner-details').style.display = (val === 'Sí') ? 'block' : 'none';
         }
 
+        function toggleBusDetails() {
+            const select = document.getElementById('bus-select');
+            const details = document.getElementById('bus-details');
+            if (!select || !details) return;
+            details.style.display = (select.value === 'Sí') ? 'block' : 'none';
+        }
+
         function openEnvelope() {
             const song = document.getElementById('wedding-song');
             song.volume = 0.3;
@@ -1661,6 +1707,24 @@ END:VCALENDAR`;
             btn.addEventListener('click', () => {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
+        })();
+
+        // Barra de progreso de scroll
+        (function setupScrollProgress() {
+            const bar = document.getElementById('scroll-progress-bar');
+            if (!bar) return;
+
+            function update() {
+                const doc = document.documentElement;
+                const scrollTop = window.pageYOffset || doc.scrollTop || 0;
+                const scrollHeight = doc.scrollHeight - doc.clientHeight;
+                const ratio = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+                bar.style.width = `${Math.min(100, Math.max(0, ratio * 100))}%`;
+            }
+
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            window.addEventListener('load', update);
         })();
     </script>
 </body>
