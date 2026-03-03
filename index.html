@@ -937,7 +937,8 @@
             /* Botón y panel de WhatsApp, recolocados para no estorbar */
             .whatsapp-float {
                 right: 14px;
-                bottom: 150px;
+                top: 80px;
+                bottom: auto;
             }
             .whatsapp-btn {
                 width: 56px;
@@ -957,12 +958,6 @@
             /* Más espacio debajo del plano de mesas para que el botón no quede tapado por el de confirmar */
             #plano-mesas-section {
                 margin-bottom: 200px;
-            }
-
-            /* Botón del plano de mesas más fácil de pulsar en móvil */
-            #plano-mesas-section .btn-premium {
-                width: 100%;
-                max-width: 420px;
             }
         }
     </style>
@@ -1522,8 +1517,12 @@
                 close();
             });
 
-            // Arranca abierto (para que se vean los botones)
-            open();
+            // Arranca abierto solo en pantallas grandes; en móvil se queda cerrado para no molestar
+            if (window.innerWidth > 768) {
+                open();
+            } else {
+                close();
+            }
         })();
 
         // Galería (lightbox)
