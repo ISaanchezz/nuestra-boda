@@ -290,7 +290,7 @@
     <header>
         <h1>Plano de Mesas</h1>
         <p>Encuentra tu mesa buscando por tu nombre.</p>
-        <a href="index.html.html" class="back-link">
+        <a href="#" id="back-to-invite" class="back-link">
             ← Volver a la invitación
         </a>
     </header>
@@ -349,6 +349,46 @@
     </footer>
 
     <script>
+        // Navegar de vuelta a la invitación (respetando URL personalizada y saltando animación)
+        (function setupBackToInvite() {
+            const link = document.getElementById('back-to-invite');
+            if (!link) return;
+
+            function getReturnUrl() {
+                if (document.referrer) {
+                    return document.referrer;
+                }
+                const params = new URLSearchParams(window.location.search);
+                const invitado = params.get('invitado');
+                if (invitado) {
+                    return 'index.html.html?invitado=' + encodeURIComponent(invitado);
+                }
+                return 'index.html.html';
+            }
+
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = getReturnUrl();
+
+                try {
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.localStorage.setItem('skipEnvelopeOnce', '1');
+                        window.opener.location.href = url;
+                        window.close();
+                        return;
+                    }
+                } catch (err) {
+                    // Si hay problemas de cross-origin, seguimos con el plan B en esta misma ventana
+                }
+
+                // Plan B: misma ventana
+                try {
+                    localStorage.setItem('skipEnvelopeOnce', '1');
+                } catch (err) {}
+                window.location.href = url;
+            });
+        })();
+
         // Datos de ejemplo de mesas y comensales.
         // Puedes editar libremente nombres, mesas y asientos.
         const tablesData = [
