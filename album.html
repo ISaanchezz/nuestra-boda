@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbum de fotos - Boda Iván & Nuria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-eucalipto: #2d4c41;
+            --color-crema: #f9f7f2;
+            --color-dorado: #b59d7e;
+            --color-texto: #333333;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            background-color: var(--color-crema);
+            color: var(--color-texto);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 24px 16px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e0ded7;
+            background: rgba(249,247,242,0.98);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 {
+            margin: 0;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--color-eucalipto);
+        }
+
+        header p {
+            margin: 6px 0 0;
+            color: #777;
+            font-size: 0.95rem;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 28px 16px 40px;
+            width: 100%;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 26px 22px 26px;
+            box-shadow: 0 14px 36px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.1rem;
+            color: var(--color-eucalipto);
+        }
+
+        p {
+            margin: 0 0 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        ul {
+            margin: 10px 0 0;
+            padding-left: 1.2rem;
+            color: #555;
+        }
+
+        .btn-main {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 26px;
+            margin-top: 20px;
+            border-radius: 999px;
+            border: none;
+            background: var(--color-eucalipto);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .btn-main:hover {
+            background: #3b6b5a;
+            transform: translateY(-1px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--color-eucalipto);
+            font-size: 0.9rem;
+            margin-top: 18px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 12px 16px 20px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Álbum de fotos</h1>
+        <p>Comparte con nosotros tus fotos de la boda 💚</p>
+    </header>
+
+    <main>
+        <section class="card" aria-label="Álbum compartido de fotos">
+            <h2>Sube aquí tus fotos</h2>
+            <p>
+                Hemos creado un álbum compartido para que podáis subir directamente vuestras fotos
+                de la boda. Momentos espontáneos, bailes, selfies… ¡todo suma!
+            </p>
+            <p>
+                Al abrir el álbum podrás:
+            </p>
+            <ul>
+                <li>Ver las fotos que vayan subiendo los invitados.</li>
+                <li>Añadir tus propias fotos y vídeos al instante.</li>
+            </ul>
+
+            <!-- SUSTITUYE ESTE ENLACE POR EL DE TU ÁLBUM COMPARTIDO (por ejemplo Google Fotos) -->
+            <a
+                href="https://photos.app.goo.gl/TU-ENLACE-DE-ALBUM"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-main"
+            >
+                📷 Abrir álbum compartido
+            </a>
+
+            <a href="index.html.html" class="back-link">
+                ← Volver a la invitación
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        Álbum compartido de la boda de Iván &amp; Nuria
+    </footer>
+</body>
+</html>
+
