@@ -667,6 +667,54 @@
             .petal-layer { display: none; }
         }
 
+        /* Animación overlay para añadir al calendario */
+        .calendar-loading {
+            position: fixed;
+            inset: 0;
+            backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .calendar-loading.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .calendar-card {
+            background: white;
+            padding: 35px 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.4s ease;
+        }
+
+        .calendar-loading.show .calendar-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .calendar-spinner {
+            width: 38px;
+            height: 38px;
+            border: 3px solid #eee;
+            border-top: 3px solid var(--color-eucalipto);
+            border-radius: 50%;
+            margin: 0 auto 18px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Formulario */
         .form-container { background: white; padding: 50px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto; border: 1px solid #eee; }
         input, select { width: 100%; padding: 12px; margin: 10px 0 20px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
@@ -1035,7 +1083,9 @@
                     <span class="countdown-label">SEGUNDOS</span>
                 </div>
             </div>
-            <button type="button" class="btn-premium calendar-btn" onclick="downloadCalendar()">📅 Añadir al calendario</button>
+            <button type="button" class="btn-premium calendar-btn" onclick="smartCalendar()">
+                📅 Añadir al calendario
+            </button>
         </header>
 
         <div class="section story-section">
@@ -1238,10 +1288,10 @@
                 <div id="bus-details" style="display:none; background:#fdfaf5; padding:20px; border-radius:10px; margin-bottom:20px;">
                     <p style="margin-top:0; font-weight:bold;">🚌 Más detalle del autobús</p>
                     <ul style="text-align:left; padding-left: 1.2rem; margin: 10px 0 0; list-style: none;">
-                        <li>1- 📍Salida de Navahondilla 12:00</li>
-                        <li>2- 🚌 Salida hacia el banquete desde parada Pequeño Luchador 14:00</li>
-                        <li>3- 🏡Primer bus de vuelta 22:00</li>
-                        <li>4- 🏡Segundo bus de vuelta 1:00</li>
+                        <li>📍Salida de Navahondilla 12:00</li>
+                        <li>🚌 Salida hacia el banquete desde parada Pequeño Luchador 14:00</li>
+                        <li>🏡Primer bus de vuelta 22:00</li>
+                        <li>🏡Segundo bus de vuelta 1:00</li>
                     </ul>
                 </div>
                 <div class="form-group">
@@ -1576,30 +1626,59 @@
             });
         })();
 
-        function downloadCalendar() {
-            const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Boda Ivan y Nuria//ES
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-DTSTAMP:20260302T120000Z
-DTSTART:20270626T130000
-DTEND:20270626T230000
-SUMMARY:Boda de Iván y Nuria
-LOCATION:Ermita de Nuestra Señora de los Remedios; Finca La Cabaña
-DESCRIPTION:Ceremonia: Ermita de Nuestra Señora de los Remedios.\\nBanquete: Finca La Cabaña.
-END:VEVENT
-END:VCALENDAR`;
+        function smartCalendar() {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
 
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'boda-ivan-nuria.ics';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            showCalendarAnimation();
+
+            setTimeout(() => {
+                if (isIOS) {
+                    window.location.href = "webcal://isaanchezz.github.io/nuestra-boda/boda-ivan-nuria.ics";
+                    return;
+                }
+
+                if (isAndroid) {
+                    const googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+                        "&text=Boda+de+Iván+y+Nuria" +
+                        "&dates=20270626T130000/20270626T230000" +
+                        "&details=Ceremonia:+Ermita+de+Nuestra+Señora+de+los+Remedios.+Banquete:+Finca+La+Cabaña." +
+                        "&location=Ermita+Nuestra+Señora+de+los+Remedios";
+
+                    window.open(googleUrl, "_blank");
+                    return;
+                }
+
+                // Escritorio
+                window.location.href = "boda-ivan-nuria.ics";
+
+            }, 900);
+        }
+
+        function showCalendarAnimation() {
+            const overlay = document.createElement('div');
+            overlay.className = 'calendar-loading';
+
+            overlay.innerHTML = `
+                <div class="calendar-card">
+                    <div class="calendar-spinner"></div>
+                    <div style="font-family:'Dancing Script'; font-size:1.8rem; color:var(--color-eucalipto);">
+                        Preparando tu evento 💚
+                    </div>
+                    <div style="margin-top:10px; color:#777;">
+                        Abriendo calendario...
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            setTimeout(() => overlay.classList.add('show'), 10);
+
+            setTimeout(() => {
+                overlay.classList.remove('show');
+                setTimeout(() => overlay.remove(), 400);
+            }, 1800);
         }
 
         function togglePartner() {
