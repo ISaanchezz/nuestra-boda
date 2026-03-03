@@ -9,6 +9,7 @@
     <meta property="og:image" content="https://isaanchezz.github.io/nuestra-boda/f6.jpeg">
     <meta property="og:url" content="https://isaanchezz.github.io/nuestra-boda/">
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Boda Iván & Nuria">
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -21,7 +22,7 @@
         :root {
             --color-eucalipto: #2d4c41; /* Verde oscuro de la foto */
             --color-crema: #f9f7f2;
-            --color-dorado-suave: #b59d7e;
+            --color-dorado: #b59d7e; /* Dorado principal unificado */
             --color-texto: #333333;
             --color-acento: #86a397; /* Verde clarito para detalles */
         }
@@ -37,6 +38,33 @@
             min-height: 100vh;
             position: relative;
             z-index: 0;
+        }
+
+        /* Modo noche automático (ligero) */
+        body.night-mode {
+            background-color: #202825;
+            color: #f2f2f2;
+        }
+        body.night-mode .section,
+        body.night-mode .card-map,
+        body.night-mode .form-container,
+        body.night-mode .gallery-thumb,
+        body.night-mode .whatsapp-panel {
+            background-color: #28332f;
+            color: #f2f2f2;
+        }
+        body.night-mode header h1,
+        body.night-mode .story-title,
+        body.night-mode h2,
+        body.night-mode h3 {
+            color: var(--color-dorado);
+        }
+        body.night-mode .card-invitation {
+            background-color: #28332f;
+            color: #f2f2f2;
+        }
+        body.night-mode .card-invitation .date {
+            color: var(--color-dorado);
         }
 
         /* Capa muy suave con la imagen de fondo */
@@ -171,7 +199,7 @@
             color: #555;
         }
         .card-invitation .date {
-            color: var(--color-dorado-suave);
+            color: var(--color-dorado);
             font-weight: bold;
             letter-spacing: 3px;
             font-size: 1.1rem;
@@ -210,7 +238,7 @@
         #main-content { display: none; opacity: 0; transition: opacity 2s ease; padding: 60px 15px; }
         
         h1 { font-family: 'Dancing Script'; font-size: 5rem; color: var(--color-eucalipto); margin: 0; }
-        .gran-dia { letter-spacing: 5px; color: var(--color-dorado-suave); font-weight: bold; margin-bottom: 50px; }
+        .gran-dia { letter-spacing: 5px; color: var(--color-dorado); font-weight: bold; margin-bottom: 50px; }
 
         .section { margin: 100px auto; max-width: 900px; }
         
@@ -240,7 +268,7 @@
             font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--color-dorado-suave);
+            color: var(--color-dorado);
         }
 
         /* Pequeña animación al llegar a 0 */
@@ -330,7 +358,7 @@
             font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: var(--color-dorado-suave);
+            color: var(--color-dorado);
             font-weight: bold;
         }
 
@@ -386,7 +414,7 @@
         .timeline { display: flex; justify-content: space-around; flex-wrap: wrap; margin: 50px 0; position: relative; }
         .timeline-item { flex: 1; min-width: 150px; padding: 20px; position: relative; }
         .timeline-item i { font-size: 2rem; color: var(--color-eucalipto); display: block; margin-bottom: 10px; }
-        .time { font-weight: bold; color: var(--color-dorado-suave); display: block; margin-bottom: 5px; }
+        .time { font-weight: bold; color: var(--color-dorado); display: block; margin-bottom: 5px; }
         .event { font-family: 'Dancing Script', cursive; font-size: 1.5rem; }
 
         /* Tarjetas de Mapas */
@@ -460,7 +488,7 @@
         .scroll-progress-bar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--color-eucalipto), var(--color-dorado-suave));
+            background: linear-gradient(90deg, var(--color-eucalipto), var(--color-dorado));
             box-shadow: 0 0 8px rgba(0,0,0,0.25);
             transform-origin: left center;
             transition: width 0.12s ease-out;
@@ -672,7 +700,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--color-dorado-suave);
+            background: var(--color-dorado);
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             opacity: 0;
             animation: firework-burst 1.2s ease-out forwards;
@@ -1063,22 +1091,22 @@
 
             <div class="gallery-grid">
                 <button type="button" class="gallery-thumb" data-full="f1.jpeg" aria-label="Abrir foto 1">
-                    <img src="f1.jpeg" alt="Foto 1">
+                    <img src="f1.jpeg" alt="Foto 1" loading="lazy">
                 </button>
                 <button type="button" class="gallery-thumb" data-full="f2.jpeg" aria-label="Abrir foto 2">
-                    <img src="f2.jpeg" alt="Foto 2">
+                    <img src="f2.jpeg" alt="Foto 2" loading="lazy">
                 </button>
                 <button type="button" class="gallery-thumb" data-full="f3.jpeg" aria-label="Abrir foto 3">
-                    <img src="f3.jpeg" alt="Foto 3">
+                    <img src="f3.jpeg" alt="Foto 3" loading="lazy">
                 </button>
                 <button type="button" class="gallery-thumb" data-full="f4.jpeg" aria-label="Abrir foto 4">
-                    <img src="f4.jpeg" alt="Foto 4">
+                    <img src="f4.jpeg" alt="Foto 4" loading="lazy">
                 </button>
                 <button type="button" class="gallery-thumb" data-full="f5.jpeg" aria-label="Abrir foto 5">
-                    <img src="f5.jpeg" alt="Foto 5">
+                    <img src="f5.jpeg" alt="Foto 5" loading="lazy">
                 </button>
                 <button type="button" class="gallery-thumb" data-full="f6.jpeg" aria-label="Abrir foto 6">
-                    <img src="f6.jpeg" alt="Foto 6">
+                    <img src="f6.jpeg" alt="Foto 6" loading="lazy">
                 </button>
             </div>
         </div>
@@ -1203,16 +1231,16 @@
                 <div id="bus-details" style="display:none; background:#fdfaf5; padding:20px; border-radius:10px; margin-bottom:20px;">
                     <p style="margin-top:0; font-weight:bold;">🚌 Más detalle del autobús</p>
                     <div class="form-group">
-                        <label>⏰ Hora de salida</label>
-                        <input type="text" name="Bus_HoraSalida" placeholder="Ej: 12:00 desde Talavera">
+                    <label>⏰ Hora de salida</label>
+                    <input type="text" name="Bus_HoraSalida" placeholder="Ej: 12:00 desde Talavera" value="Hacia la ceremonia 12:00 en Navahondilla, hacia el banquete 14:00 en Parada Pequeño Luchador">
                     </div>
                     <div class="form-group">
                         <label>📍 Punto de recogida</label>
                         <input type="text" name="Bus_PuntoRecogida" placeholder="Ej: Plaza de Toros, Talavera">
                     </div>
                     <div class="form-group">
-                        <label>🔁 Regreso</label>
-                        <input type="text" name="Bus_Regreso" placeholder="Ej: Regreso al final de la fiesta">
+                    <label>🔁 Regreso</label>
+                    <input type="text" name="Bus_Regreso" placeholder="Ej: Regreso al final de la fiesta" value="Primer bus 21:00 y segundo bus 1:00">
                     </div>
                 </div>
                 <div class="form-group">
@@ -1245,6 +1273,16 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
+
+        // Modo día / noche automático (según hora local del visitante)
+        (function autoNightMode() {
+            const now = new Date();
+            const hour = now.getHours();
+            // Noche aproximada: de 20:00 a 7:59
+            if (hour >= 20 || hour < 8) {
+                document.body.classList.add('night-mode');
+            }
+        })();
 
         /* === Reveal Scroll Effect (Nuestra Historia) === */
         function revealOnScroll() {
