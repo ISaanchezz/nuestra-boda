@@ -888,7 +888,7 @@
 
             .whatsapp-float {
                 right: 14px;
-                bottom: 14px;
+                bottom: 92px;
             }
             .whatsapp-btn {
                 width: 56px;
@@ -952,7 +952,7 @@
             <div class="envelope-front"></div>
             <div class="envelope-seal" id="envelope-seal">I & N</div>
             <div class="card-invitation">
-                <h2>¡Nos Casamos!</h2>
+            <h2 id="card-invitation-title">¡Nos Casamos!</h2>
                 <div class="names">Iván & Nuria</div>
                 <p class="date">26 . 06 . 2027</p>
             </div>
@@ -1246,7 +1246,13 @@
                     seal.textContent = shortName;
                 }
 
-                // 2) Autorrellenar formulario
+                // 2) Personalizar texto de la carta
+                const cardTitle = document.getElementById('card-invitation-title');
+                if (cardTitle) {
+                    cardTitle.textContent = `${decodedName}, nos casamos 💚`;
+                }
+
+                // 3) Autorrellenar formulario
                 const input = document.getElementById('guest-input');
                 if (input) {
                     input.value = decodedName;
