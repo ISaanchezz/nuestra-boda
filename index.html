@@ -934,9 +934,10 @@
                 right: 14px;
             }
 
+            /* Botón y panel de WhatsApp, recolocados para no estorbar */
             .whatsapp-float {
                 right: 14px;
-                bottom: 92px;
+                bottom: 150px;
             }
             .whatsapp-btn {
                 width: 56px;
@@ -951,6 +952,17 @@
             }
             .gallery-thumb img {
                 height: 160px;
+            }
+
+            /* Más espacio debajo del plano de mesas para que el botón no quede tapado por el de confirmar */
+            #plano-mesas-section {
+                margin-bottom: 200px;
+            }
+
+            /* Botón del plano de mesas más fácil de pulsar en móvil */
+            #plano-mesas-section .btn-premium {
+                width: 100%;
+                max-width: 420px;
             }
         }
     </style>
@@ -1230,18 +1242,12 @@
                 </div>
                 <div id="bus-details" style="display:none; background:#fdfaf5; padding:20px; border-radius:10px; margin-bottom:20px;">
                     <p style="margin-top:0; font-weight:bold;">🚌 Más detalle del autobús</p>
-                    <div class="form-group">
-                    <label>⏰ Hora de salida</label>
-                    <input type="text" name="Bus_HoraSalida" placeholder="Ej: 12:00 desde Talavera" value="Hacia la ceremonia 12:00 en Navahondilla, hacia el banquete 14:00 en Parada Pequeño Luchador">
-                    </div>
-                    <div class="form-group">
-                        <label>📍 Punto de recogida</label>
-                        <input type="text" name="Bus_PuntoRecogida" placeholder="Ej: Plaza de Toros, Talavera">
-                    </div>
-                    <div class="form-group">
-                    <label>🔁 Regreso</label>
-                    <input type="text" name="Bus_Regreso" placeholder="Ej: Regreso al final de la fiesta" value="Primer bus 21:00 y segundo bus 1:00">
-                    </div>
+                    <ul style="text-align:left; padding-left: 1.2rem; margin: 10px 0 0; list-style: none;">
+                        <li>1- 📍Salida de Navahondilla 12:00</li>
+                        <li>2- 🚌 Salida hacia el banquete desde parada Pequeño Luchador 14:00</li>
+                        <li>3- 🏡Primer bus de vuelta 22:00</li>
+                        <li>4- 🏡Segundo bus de vuelta 1:00</li>
+                    </ul>
                 </div>
                 <div class="form-group">
                     <label>🎵 ¿Qué canción te haría bailar?</label>
@@ -1269,7 +1275,7 @@
             </div>
         </div>
 
-        <div class="section" data-aos="fade-up">
+        <div id="plano-mesas-section" class="section" data-aos="fade-up">
             <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--color-eucalipto);">
                 🪑 Plano de Mesas
             </h2>
@@ -1368,7 +1374,41 @@
             }
         }
 
-        window.addEventListener('load', personalizeGuest);
+        function getInviteStorageKey() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const invitado = params.get('invitado');
+                if (invitado) {
+                    return 'formSubmitted_invitado_' + invitado;
+                }
+                const input = document.getElementById('guest-input');
+                if (input && input.value.trim()) {
+                    return 'formSubmitted_nombre_' + input.value.trim().toLowerCase();
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        function applyFormSubmittedState() {
+            const formEl = document.getElementById('wedding-form');
+            const successEl = document.getElementById('success-msg');
+            if (!formEl || !successEl) return;
+
+            const key = getInviteStorageKey();
+            if (!key) return;
+
+            try {
+                if (localStorage.getItem(key) === '1') {
+                    formEl.style.display = 'none';
+                    successEl.style.display = 'block';
+                }
+            } catch (e) {}
+        }
+
+        window.addEventListener('load', () => {
+            personalizeGuest();
+            applyFormSubmittedState();
+        });
 
         // Pasar parámetros de invitado a la página de mesas (para poder volver a la URL personalizada)
         (function setupMesasLink() {
@@ -1733,6 +1773,13 @@ END:VCALENDAR`;
                     launchFireworks();
                     form.style.display = 'none';
                     document.getElementById('success-msg').style.display = 'block';
+                    // Marcar invitación como enviada en este navegador
+                    try {
+                        const key = getInviteStorageKey();
+                        if (key) {
+                            localStorage.setItem(key, '1');
+                        }
+                    } catch (e) {}
                 })
                 .catch(() => {
                     alert('Error al enviar. Inténtalo de nuevo.');
