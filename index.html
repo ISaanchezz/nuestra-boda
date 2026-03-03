@@ -896,11 +896,6 @@
                 font-size: 1.45rem;
             }
 
-            /* Mostrar botón fijo Confirmar asistencia solo en móvil */
-            #floating-confirm-btn {
-                display: block;
-            }
-
             /* Galería en móvil */
             .gallery-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1474,10 +1469,10 @@ END:VCALENDAR`;
                 card.classList.add('card-centered');
             }, 900);
 
-            // 3) animar la carta hacia la parte superior simulando que se convierte en el header
+            // 3) dejar la carta un momento en el centro y luego animarla hacia la parte superior simulando que se convierte en el header
             setTimeout(() => {
                 card.classList.add('card-to-header');
-            }, 1600);
+            }, 2900);
 
             // 4) desvanecer el sobre con blur y mostrar el contenido principal
             setTimeout(() => {
@@ -1487,6 +1482,12 @@ END:VCALENDAR`;
                 const content = document.getElementById('main-content');
                 content.style.display = 'block';
                 setTimeout(() => content.style.opacity = '1', 100);
+
+                // mostrar botón fijo de Confirmar asistencia solo después de entrar en la página (móvil)
+                const floatingBtn = document.getElementById('floating-confirm-btn');
+                if (floatingBtn && window.innerWidth <= 768) {
+                    floatingBtn.style.display = 'block';
+                }
             }, 2200);
         }
 
