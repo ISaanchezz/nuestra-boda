@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plano de Mesas - Boda Iván & Nuria</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --color-eucalipto: #2d4c41;
@@ -14,7 +17,9 @@
             --color-acento: #86a397;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
@@ -30,7 +35,7 @@
             padding: 24px 16px 10px;
             text-align: center;
             border-bottom: 1px solid #e0ded7;
-            background: rgba(249,247,242,0.98);
+            background: rgba(249, 247, 242, 0.98);
             position: sticky;
             top: 0;
             z-index: 10;
@@ -70,8 +75,8 @@
             background: #fff;
             border-radius: 18px;
             padding: 18px 18px 20px;
-            box-shadow: 0 14px 36px rgba(0,0,0,0.06);
-            border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.03);
         }
 
         .card h2 {
@@ -138,7 +143,7 @@
             gap: 6px;
             padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(181,157,126,0.12);
+            background: rgba(181, 157, 126, 0.12);
             color: var(--color-dorado);
             font-size: 0.8rem;
             margin-top: 4px;
@@ -156,19 +161,19 @@
             padding: 12px;
             border-radius: 16px;
             background: #fdfbf7;
-            border: 1px solid rgba(45,76,65,0.12);
+            border: 1px solid rgba(45, 76, 65, 0.12);
             cursor: pointer;
             transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
         }
 
         .table-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(0,0,0,0.07);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
         }
 
         .table-card.active {
             border-color: var(--color-dorado);
-            box-shadow: 0 0 0 2px rgba(181,157,126,0.4);
+            box-shadow: 0 0 0 2px rgba(181, 157, 126, 0.4);
             background: #fffaf2;
         }
 
@@ -208,7 +213,7 @@
             align-items: center;
             padding: 3px 8px;
             border-radius: 999px;
-            border: 1px solid rgba(45,76,65,0.15);
+            border: 1px solid rgba(45, 76, 65, 0.15);
             margin: 2px 2px;
             background: #fff;
         }
@@ -259,7 +264,7 @@
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            border: 2px solid rgba(45,76,65,0.25);
+            border: 2px solid rgba(45, 76, 65, 0.25);
             background: #fdfbf7;
         }
 
@@ -284,8 +289,76 @@
             font-size: 0.8rem;
             color: #999;
         }
+
+        /* === MODO NOCHE === */
+        body.night-mode {
+            background-color: #202825;
+            color: #f2f2f2;
+        }
+
+        body.night-mode header {
+            background: rgba(32, 40, 37, 0.98);
+            border-bottom-color: #2e3d38;
+        }
+
+        body.night-mode header h1,
+        body.night-mode .card h2,
+        body.night-mode .side-panel-section h3 {
+            color: var(--color-dorado);
+        }
+
+        body.night-mode header p {
+            color: #aaa;
+        }
+
+        body.night-mode .card {
+            background-color: #28332f;
+            border-color: rgba(255, 255, 255, 0.04);
+            color: #f2f2f2;
+        }
+
+        body.night-mode .hint,
+        body.night-mode .side-panel-section p,
+        body.night-mode .legend-item,
+        body.night-mode .table-meta {
+            color: #aaa;
+        }
+
+        body.night-mode .search-result strong {
+            color: var(--color-dorado);
+        }
+
+        body.night-mode .back-link {
+            color: var(--color-dorado);
+        }
+
+        body.night-mode .table-card {
+            background: #2c3934;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.night-mode .table-card.active {
+            background: #2f3d35;
+        }
+
+        body.night-mode .guest-pill {
+            background: #354840;
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        body.night-mode .search-group input[type="text"] {
+            background: #28332f;
+            border-color: #3a4f47;
+            color: #f2f2f2;
+        }
+
+        body.night-mode footer {
+            color: #555;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Plano de Mesas</h1>
@@ -298,7 +371,8 @@
     <main class="main-layout">
         <section class="card" aria-label="Buscador de mesa por nombre">
             <h2><span class="icon">🔍</span> Consulta tu mesa</h2>
-            <p class="hint">Escribe tu nombre tal y como aparece en la invitación. La búsqueda se actualiza al momento.</p>
+            <p class="hint">Escribe tu nombre tal y como aparece en la invitación. La búsqueda se actualiza al momento.
+            </p>
 
             <div class="search-group">
                 <input type="text" id="guest-search" placeholder="Ej: Juan Pérez">
@@ -337,7 +411,8 @@
 
     <section class="card" style="max-width: 1200px; margin: 0 auto 26px; padding-top: 16px;">
         <h2><span class="icon">🪑</span> Plano de mesas</h2>
-        <p class="hint">Haz clic en una mesa para ver quién se sienta en ella. Si has buscado tu nombre, resaltaremos tu sitio.</p>
+        <p class="hint">Haz clic en una mesa para ver quién se sienta en ella. Si has buscado tu nombre, resaltaremos tu
+            sitio.</p>
 
         <div class="tables-map" id="tables-map" aria-label="Plano interactivo de mesas">
             <!-- Se rellena por JavaScript -->
@@ -347,6 +422,16 @@
     <footer>
         Distribución orientativa. Cualquier cambio de última hora lo indicaremos el día de la boda 💚
     </footer>
+
+    <script>
+        // Modo día / noche automático (según hora local del visitante)
+        (function autoNightMode() {
+            const hour = new Date().getHours();
+            if (hour >= 20 || hour < 8) {
+                document.body.classList.add('night-mode');
+            }
+        })();
+    </script>
 
     <script>
         // Navegar de vuelta a la invitación (respetando URL personalizada y saltando animación)
@@ -384,7 +469,7 @@
                 // Plan B: misma ventana
                 try {
                     localStorage.setItem('skipEnvelopeOnce', '1');
-                } catch (err) {}
+                } catch (err) { }
                 window.location.href = url;
             });
         })();
@@ -605,4 +690,5 @@
         renderTables();
     </script>
 </body>
+
 </html>
